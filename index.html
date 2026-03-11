@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>战略研究平台 · Strategic Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Han+Serif+CN:wght@300;400;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0f;
+    --paper: #f5f2ec;
+    --cream: #ede8df;
+    --steel: #1a2235;
+    --navy: #0d1b2a;
+    --gold: #c8a84b;
+    --gold-light: #e4c97e;
+    --red-accent: #8b1a1a;
+    --blue-accent: #1a3a5c;
+    --sage: #4a6741;
+    --mist: #6b7a8d;
+    --border: rgba(200, 168, 75, 0.3);
+    --shadow: 0 20px 60px rgba(10,10,15,0.3);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Playfair Display', 'Source Han Serif CN', serif;
+    background: var(--navy);
+    color: var(--paper);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── BACKGROUND ─── */
+  .bg-texture {
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(200,168,75,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 70% at 80% 90%, rgba(26,58,92,0.4) 0%, transparent 60%),
+      linear-gradient(160deg, #0d1b2a 0%, #0a1320 40%, #050d18 100%);
+  }
+  .bg-grid {
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(200,168,75,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,168,75,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* ─── LAYOUT ─── */
+  .container {
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    padding: 48px 0 36px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 52px;
+    display: flex; align-items: flex-end; justify-content: space-between;
+  }
+  .logo-block {}
+  .logo-en {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--gold); opacity: 0.7; margin-bottom: 8px;
+  }
+  .logo-zh {
+    font-size: 32px; font-weight: 900; letter-spacing: -1px;
+    color: var(--paper);
+    text-shadow: 0 0 40px rgba(200,168,75,0.2);
+  }
+  .logo-sub {
+    font-size: 13px; color: var(--mist); font-weight: 300;
+    font-family: 'JetBrains Mono', monospace; letter-spacing: 2px;
+    margin-top: 6px;
+  }
+  .header-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); border: 1px solid var(--border);
+    padding: 6px 14px; border-radius: 2px;
+    background: rgba(200,168,75,0.05);
+  }
+
+  /* ─── SKILL SELECTOR ─── */
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--mist); margin-bottom: 20px;
+  }
+  .skill-tabs {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin-bottom: 40px;
+  }
+  .skill-tab {
+    cursor: pointer;
+    padding: 24px 20px;
+    border: 1px solid rgba(200,168,75,0.15);
+    background: rgba(255,255,255,0.02);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    position: relative; overflow: hidden;
+  }
+  .skill-tab::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--gold); transform: scaleX(0); transition: transform 0.3s ease;
+    transform-origin: left;
+  }
+  .skill-tab:hover { border-color: rgba(200,168,75,0.35); background: rgba(255,255,255,0.04); }
+  .skill-tab:hover::before { transform: scaleX(1); }
+  .skill-tab.active {
+    border-color: var(--gold);
+    background: rgba(200,168,75,0.07);
+    box-shadow: 0 0 30px rgba(200,168,75,0.1), inset 0 0 20px rgba(200,168,75,0.03);
+  }
+  .skill-tab.active::before { transform: scaleX(1); }
+
+  .skill-tab.active-hyp { --tab-color: #c8a84b; }
+  .skill-tab.active-event { --tab-color: #5c7a9e; }
+  .skill-tab.active-policy { --tab-color: #5a7d52; }
+
+  .tab-icon {
+    font-size: 22px; margin-bottom: 12px; display: block;
+    filter: grayscale(0.3);
+  }
+  .tab-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 3px; color: var(--mist);
+    margin-bottom: 8px;
+  }
+  .tab-title {
+    font-size: 15px; font-weight: 700; color: var(--paper);
+    margin-bottom: 6px; line-height: 1.3;
+  }
+  .tab-desc {
+    font-size: 11px; color: var(--mist); line-height: 1.6;
+    font-family: 'JetBrains Mono', monospace; font-weight: 300;
+  }
+
+  /* ─── INPUT PANEL ─── */
+  .input-panel {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(200,168,75,0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 32px;
+    transition: border-color 0.3s;
+  }
+  .input-panel:focus-within { border-color: rgba(200,168,75,0.4); }
+
+  .input-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(200,168,75,0.1);
+    display: flex; align-items: center; gap: 12px;
+    background: rgba(255,255,255,0.02);
+  }
+  .input-mode-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .mode-hyp .input-mode-tag { background: rgba(200,168,75,0.15); color: var(--gold); }
+  .mode-event .input-mode-tag { background: rgba(92,122,158,0.2); color: #7aa3cc; }
+  .mode-policy .input-mode-tag { background: rgba(90,125,82,0.2); color: #8fba87; }
+  .mode-critical .input-mode-tag { background: rgba(92,122,158,0.2); color: #7aa3cc; }
+  .mode-ren .input-mode-tag { background: rgba(90,125,82,0.2); color: #8fba87; }
+
+  .input-hint { font-size: 12px; color: var(--mist); font-family: 'JetBrains Mono', monospace; }
+
+  textarea {
+    width: 100%; min-height: 160px;
+    background: transparent; border: none; outline: none; resize: vertical;
+    color: var(--paper); font-family: 'Playfair Display', serif;
+    font-size: 16px; line-height: 1.7; padding: 24px;
+    caret-color: var(--gold);
+  }
+  textarea::placeholder { color: rgba(107,122,141,0.5); font-style: italic; }
+
+  .input-footer {
+    padding: 14px 24px;
+    border-top: 1px solid rgba(200,168,75,0.08);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .char-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; color: var(--mist);
+  }
+
+  /* ─── SUBMIT BUTTON ─── */
+  .btn-submit {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 32px;
+    border: 1px solid var(--gold);
+    background: linear-gradient(135deg, rgba(200,168,75,0.15), rgba(200,168,75,0.05));
+    color: var(--gold);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    cursor: pointer; border-radius: 3px;
+    transition: all 0.3s ease; width: 100%;
+    justify-content: center; margin-bottom: 20px;
+  }
+  .btn-submit:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(200,168,75,0.25), rgba(200,168,75,0.1));
+    box-shadow: 0 0 20px rgba(200,168,75,0.2);
+    transform: translateY(-1px);
+  }
+  .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+  .btn-arrow { font-size: 16px; transition: transform 0.3s; }
+  .btn-submit:hover:not(:disabled) .btn-arrow { transform: translateX(4px); }
+
+  /* ─── LOADING ─── */
+  .loading-bar {
+    height: 2px; background: rgba(200,168,75,0.1);
+    border-radius: 1px; overflow: hidden; margin-bottom: 32px;
+    display: none;
+  }
+  .loading-bar.active { display: block; }
+  .loading-fill {
+    height: 100%;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    width: 40%; animation: sweep 1.5s ease-in-out infinite;
+  }
+  @keyframes sweep {
+    0% { transform: translateX(-200%); }
+    100% { transform: translateX(400%); }
+  }
+
+  .loading-status {
+    text-align: center; padding: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 2px; color: var(--mist);
+    display: none;
+  }
+  .loading-status.active { display: block; }
+  .loading-dots::after {
+    content: ''; animation: dots 1.5s infinite;
+  }
+  @keyframes dots {
+    0%,20% { content: '.'; }
+    40%,60% { content: '..'; }
+    80%,100% { content: '...'; }
+  }
+
+  /* ─── OUTPUT PANEL ─── */
+  .output-panel {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(200,168,75,0.2);
+    border-radius: 6px; overflow: hidden;
+    display: none; animation: fadeIn 0.5s ease;
+  }
+  .output-panel.visible { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .output-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(200,168,75,0.1);
+    display: flex; align-items: center; justify-content: space-between;
+    background: rgba(200,168,75,0.04);
+  }
+  .output-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold);
+  }
+  .output-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; color: var(--mist); letter-spacing: 1px;
+  }
+
+  .output-body {
+    padding: 32px;
+    max-height: 600px; overflow-y: auto;
+    line-height: 1.8; font-size: 15px; color: rgba(245,242,236,0.9);
+  }
+  .output-body::-webkit-scrollbar { width: 4px; }
+  .output-body::-webkit-scrollbar-track { background: transparent; }
+  .output-body::-webkit-scrollbar-thumb { background: rgba(200,168,75,0.3); border-radius: 2px; }
+
+  /* Markdown-style rendering */
+  .output-body h2 {
+    font-size: 20px; font-weight: 700; color: var(--gold-light);
+    margin: 28px 0 14px; padding-bottom: 8px;
+    border-bottom: 1px solid rgba(200,168,75,0.2);
+  }
+  .output-body h3 {
+    font-size: 16px; font-weight: 700; color: var(--paper);
+    margin: 20px 0 10px;
+  }
+  .output-body p { margin: 0 0 14px; }
+  .output-body ul, .output-body ol { padding-left: 24px; margin: 0 0 14px; }
+  .output-body li { margin-bottom: 6px; }
+  .output-body strong { color: var(--gold-light); font-weight: 700; }
+  .output-body em { color: var(--mist); font-style: italic; }
+  .output-body table {
+    width: 100%; border-collapse: collapse; margin: 16px 0;
+    font-size: 13px; font-family: 'JetBrains Mono', monospace;
+  }
+  .output-body th {
+    background: rgba(200,168,75,0.15); color: var(--gold);
+    padding: 10px 14px; text-align: left; font-weight: 700;
+    border: 1px solid rgba(200,168,75,0.2);
+  }
+  .output-body td {
+    padding: 8px 14px; border: 1px solid rgba(255,255,255,0.05);
+    color: rgba(245,242,236,0.8);
+  }
+  .output-body tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .output-body blockquote {
+    border-left: 3px solid var(--gold);
+    padding: 12px 20px; margin: 16px 0;
+    background: rgba(200,168,75,0.05);
+    font-style: italic; color: var(--mist);
+  }
+  .output-body code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; background: rgba(255,255,255,0.06);
+    padding: 2px 6px; border-radius: 2px; color: #7aa3cc;
+  }
+  .output-body hr {
+    border: none; border-top: 1px solid rgba(200,168,75,0.15);
+    margin: 24px 0;
+  }
+
+  /* ─── ERROR ─── */
+  .error-box {
+    padding: 20px 24px;
+    background: rgba(139,26,26,0.15);
+    border: 1px solid rgba(139,26,26,0.3);
+    border-radius: 4px; color: #e8a0a0;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    display: none; margin-bottom: 20px;
+  }
+  .error-box.visible { display: block; }
+
+  /* ─── EXAMPLES ─── */
+  .examples-row {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px;
+  }
+  .example-chip {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 1px; color: var(--mist);
+    border: 1px solid rgba(107,122,141,0.25);
+    padding: 5px 12px; border-radius: 20px; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .example-chip:hover { color: var(--gold); border-color: rgba(200,168,75,0.4); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    margin-top: 60px; padding-top: 24px;
+    border-top: 1px solid rgba(200,168,75,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; color: rgba(107,122,141,0.5);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 700px) {
+    .skill-tabs { grid-template-columns: 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .output-body { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-texture"></div>
+<div class="bg-grid"></div>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo-block">
+      <div class="logo-en">Strategic Intelligence Platform</div>
+      <div class="logo-zh">战略研究平台</div>
+      <div class="logo-sub">Powered by Claude · Anthropic</div>
+    </div>
+    <div class="header-badge">AI · RESEARCH · ANALYSIS</div>
+  </header>
+
+  <!-- SKILL SELECTOR -->
+  <div class="section-label">// 选择分析模式</div>
+  <div class="skill-tabs">
+
+    <div class="skill-tab active" data-mode="hypothesis" onclick="selectMode('hypothesis', this)">
+      <span class="tab-icon">🔬</span>
+      <div class="tab-num">MODE 01</div>
+      <div class="tab-title">战略假设分析</div>
+      <div class="tab-desc">假设驱动推演<br>五层架构验证框架</div>
+    </div>
+
+    <div class="skill-tab" data-mode="critical" onclick="selectMode('critical', this)">
+      <span class="tab-icon">⚖️</span>
+      <div class="tab-num">MODE 02</div>
+      <div class="tab-title">独立批判分析</div>
+      <div class="tab-desc">正反对称审视<br>五步批判性框架</div>
+    </div>
+
+    <div class="skill-tab" data-mode="ren" onclick="selectMode('ren', this)">
+      <span class="tab-icon">🏗️</span>
+      <div class="tab-num">MODE 03</div>
+      <div class="tab-title">任正非视角审视</div>
+      <div class="tab-desc">华为经营哲学<br>犀利务实直指要害</div>
+    </div>
+
+  </div>
+
+  <!-- INPUT PANEL -->
+  <div class="input-panel mode-hyp" id="inputPanel">
+    <div class="input-header">
+      <span class="input-mode-tag" id="modeTag">战略假设</span>
+      <span class="input-hint" id="inputHint">描述您的战略假设或分析问题</span>
+    </div>
+    <textarea id="userInput" placeholder="例如：假设美国在2025年对华半导体出口管制进一步升级，将如何影响中国科技产业的战略路径？" maxlength="2000"></textarea>
+    <div class="input-footer">
+      <span class="char-count" id="charCount">0 / 2000</span>
+    </div>
+  </div>
+
+  <!-- EXAMPLES -->
+  <div class="examples-row" id="examplesRow">
+    <span class="example-chip" onclick="fillExample(this)">美伊关系战略假设</span>
+    <span class="example-chip" onclick="fillExample(this)">中美科技脱钩情景推演</span>
+    <span class="example-chip" onclick="fillExample(this)">欧盟战略自主假设分析</span>
+  </div>
+
+  <!-- SUBMIT -->
+  <br>
+  <button class="btn-submit" id="submitBtn" onclick="runAnalysis()">
+    <span>启动战略分析引擎</span>
+    <span class="btn-arrow">→</span>
+  </button>
+
+  <!-- LOADING -->
+  <div class="loading-bar" id="loadingBar"><div class="loading-fill"></div></div>
+  <div class="loading-status" id="loadingStatus">
+    <span class="loading-dots">正在调用战略分析模型</span>
+  </div>
+
+  <!-- ERROR -->
+  <div class="error-box" id="errorBox"></div>
+
+  <!-- OUTPUT -->
+  <div class="output-panel" id="outputPanel">
+    <div class="output-header">
+      <span class="output-title" id="outputTitle">分析结果</span>
+      <span class="output-meta" id="outputMeta"></span>
+    </div>
+    <div class="output-body" id="outputBody"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-text">战略研究平台 · Strategic Intelligence · Claude-Powered</span>
+    <span class="footer-text">© 2026 · 仅供研究参考</span>
+  </footer>
+
+</div>
+
+<script>
+// ─── STATE ───
+let currentMode = 'hypothesis';
+const MODES = {
+  hypothesis: {
+    tag: '战略假设',
+    hint: '描述您的战略假设或分析问题',
+    title: '战略假设分析报告',
+    placeholder: '例如：假设美国在2025年对华半导体出口管制进一步升级，将如何影响中国科技产业的战略路径？',
+    examples: ['美伊关系战略假设', '中美科技脱钩情景推演', '欧盟战略自主假设分析'],
+    panelClass: 'mode-hyp',
+    system: `你是顶级战略分析师，专门进行战略假设分析（Strategic Hypothesis Analysis）。
+
+请严格按照以下五层架构输出完整分析（使用Markdown格式）：
+
+## 战略假设分析：[主题]
+
+### 🎯 核心假设（H0）
+[一句话清晰陈述主假设]
+
+**备择假设：**
+- H1: [竞争性假设1]
+- H2: [竞争性假设2]
+
+**假设前提：** [列出2-3个成立条件]
+**时间窗口：** [具体时间范围]
+
+---
+
+### 🔗 逻辑链条
+[前提] → [驱动因素] → [关键节点] → [预期结果]
+
+**关键节点分析：**
+1. **节点A**（重要性：高）：[说明]
+2. **节点B**（重要性：中）：[说明]
+3. **节点C**（重要性：中）：[说明]
+
+**潜在逻辑漏洞：**
+- [漏洞1及其影响]
+- [漏洞2及其影响]
+
+---
+
+### 📊 证据矩阵
+
+| 维度 | 支持假设的证据 | 反对假设的证据 | 证据权重 |
+|------|------------|------------|---------|
+| 历史先例 | | | 高/中/低 |
+| 当前信号 | | | 高/中/低 |
+| 结构性因素 | | | 高/中/低 |
+| 行为体能力 | | | 高/中/低 |
+| 意图指标 | | | 高/中/低 |
+
+---
+
+### 🔮 情景推演
+
+**基准情景（概率：X%）**
+[描述最可能发展路径，关键假设，时间框架]
+
+**强化情景（概率：Y%）**
+[假设完全成立的路径]
+
+**否定情景（概率：Z%）**
+[假设被证伪的反向路径]
+
+**黑天鹅情景**
+[小概率高冲击事件]
+
+---
+
+### ✅ 验证框架
+
+**关键验证指标：**
+1. [指标1]：观测方式
+2. [指标2]：观测方式
+3. [指标3]：观测方式
+
+**触发修订信号：**
+- [信号1] → 需要[何种修订]
+- [信号2] → 需要[何种修订]
+
+**当前置信度：** [X/10] — [理由]
+
+---
+
+### 💡 战略含义
+[对决策者的核心建议，3-5条，简洁有力]
+
+保持客观中立，数据驱动，金字塔原理（结论先行）。`
+  },
+  critical: {
+    tag: '独立批判',
+    hint: '输入任何报告、观点、论述或方案，进行独立批判性审视',
+    title: '独立批判性分析报告',
+    placeholder: '例如：请批判性分析以下战略报告/观点/方案……（粘贴内容或描述您希望审视的论述）',
+    examples: ['批判这份战略规划', '审视这个市场判断', '分析这个观点的漏洞'],
+    panelClass: 'mode-event',
+    system: `你是一位独立、客观、专业的批判性分析师。核心原则：独立性（不受输入内容立场影响）、对称性（正反观点均等深度）、建设性（批判服务于改进）、专业性（战略分析师/学术评审的严格标准）。
+
+严格按以下五步框架输出完整分析（Markdown格式）：
+
+## 📋 内容解构
+
+**核心主张：** [该内容想论证什么？1-3句话]
+
+**关键假设：** [作者隐含了哪些前提？]
+
+**论证结构：** [主要支撑论据是什么？]
+
+**分析范围：** [内容覆盖哪些维度，忽略了哪些？]
+
+---
+
+## ✅ 正方审视：支持与肯定
+
+### 论证优势
+[哪些逻辑链条是严密的？哪些数据/案例有较强说服力？哪些见解具有原创性？]
+
+### 成立条件与依据
+[在什么条件下该观点是成立的？支持论点的现实依据？历史先例或比较案例能印证什么？]
+
+### 实践价值
+[如果按此观点行动，可能产生哪些积极结果？对目标受众有哪些切实价值？]
+
+---
+
+## ⚠️ 反方审视：质疑与挑战
+
+### 逻辑缺陷
+识别以下谬误（如有）：
+- 因果倒置 / 相关性误作因果性
+- 以偏概全 / 选择性证据
+- 虚假二分法 / 稻草人论证
+- 循环论证 / 论证跳跃断层
+
+### 假设质疑
+[哪些关键假设缺乏论证？如果假设不成立，结论如何变化？有哪些反事实情景被忽略？]
+
+### 盲点与遗漏
+[哪些重要维度被忽视？有哪些已知反例或反证？哪些利益相关方视角缺席？]
+
+### 风险与副作用
+[按此逻辑行动可能带来哪些负面后果？是否存在被低估的结构性风险？]
+
+---
+
+## ⚖️ 综合评价
+
+| 维度 | 评估 |
+|------|------|
+| 论证严密性 | 强 / 中 / 弱 |
+| 证据充分性 | 强 / 中 / 弱 |
+| 视角完整性 | 强 / 中 / 弱 |
+| 实践可操作性 | 强 / 中 / 弱 |
+| 创新洞察性 | 强 / 中 / 弱 |
+
+**最强论点：** [该内容最有价值的核心是什么？]
+
+**最大弱点：** [最需要警惕或修正的问题是什么？]
+
+**适用边界：** [该内容在什么情境下成立、在什么情境下失效？]
+
+---
+
+## 💡 改进建议
+
+1. **补强建议：** [哪些论点需要更多证据支撑？怎么补充？]
+2. **修正建议：** [哪些错误需要更正？如何更正？]
+3. **扩展建议：** [哪些维度值得深入探讨？]
+4. **重构建议（如有必要）：** [如果整体框架有问题，提供替代性分析路径]
+
+---
+
+严格遵守：正反两方分析篇幅和深度须大致均衡；每个观点必须有具体内容支撑，不得停留在空泛陈述；禁止无条件认同或无差别否定；禁止用模糊词汇回避实质判断。`
+  },
+  ren: {
+    tag: '任正非视角',
+    hint: '提交任何战略报告、经营建议、管理方案，以任正非哲学进行评审',
+    title: '任正非视角评审报告',
+    placeholder: '例如：请以任正非视角评审以下经营建议/战略方案/管理报告……（粘贴内容）',
+    examples: ['评审这份市场进入方案', '从华为视角看这个战略', '任总会怎么评这份报告'],
+    panelClass: 'mode-policy',
+    system: `你将扮演一位深度内化了任正非管理哲学与华为经营理念的战略顾问，对用户提交的报告、建议、方案进行系统性评判。评审风格：直接、务实、不绕弯子，不回避矛盾，直指本质，批评有建设性。
+
+以下是你必须内化的任正非核心思想体系（评审时作为底层逻辑）：
+
+【战略哲学】聚焦主航道/压强原则；活下去是硬道理/永远不忽视生存危机；以客户为中心而非以技术为中心；灰度哲学（在不确定中寻找平衡）；长期主义与战略耐心。
+
+【经营哲学】利润不是目的，现金流是命脉；均衡发展不能瘸腿；规模与效益并重；多打粮食与提高土地肥力并重；内部定价要反映真实市场价值。
+
+【管理哲学】让听得见炮声的人做决策；批判完美主义拥抱大致正确；将军是打出来的；自我批判与开放心态；反对山头主义与部门本位。
+
+【创新哲学】无人区与第一性原理；开放合作不自我封闭；研发投入不能动摇；基础研究是战略性布局。
+
+严格按以下结构输出评审（Markdown格式）：
+
+## 【总体判断】
+
+[用1-3句话给出任正非式的直接判断：这份报告/建议的核心价值和主要问题。风格犀利、直接，不回避问题。]
+
+---
+
+## 【战略层面评判】
+
+- ✅ **做得对的地方：** [具体，不能泛泛表扬]
+- ⚠️ **需要反思的地方：** [追问"为什么"]
+- ❌ **根本性问题：** [如果有]
+
+从战略方向、聚焦程度、长期布局、生存危机意识等维度评判。
+
+---
+
+## 【经营层面评判】
+
+从客户价值、现金流影响、均衡发展、盈利质量等维度评判。
+[具体分析，引用华为财务铁律："利润表是化妆品，现金流表才是体检报告"]
+
+---
+
+## 【管理层面评判】
+
+从决策机制、组织活力、一线赋能、内部合作等维度评判。（如报告涉及管理议题则展开，否则可简略）
+
+---
+
+## 【任正非会追问的问题】
+
+列出3-5个任正非式的灵魂追问——直指思维盲区，具有挑战性：
+1. [追问1]
+2. [追问2]
+3. [追问3]
+4. [追问4（如有）]
+5. [追问5（如有）]
+
+---
+
+## 【改进建议】
+
+按优先级排列3-5条具体可操作建议，每条说明：建议内容 / 背后的华为价值逻辑 / 预期改善效果。
+
+---
+
+## 【任正非语录参照】
+
+引用1-3条与本报告议题最相关的任正非经典语录，支撑评审逻辑。从以下语录库中选择最贴切的：
+
+战略类："方向大致正确，组织充满活力，这就是华为成功的基础。" / "压强原则：在同一时间、地点，集中优势兵力，形成局部突破。" / "任何一个人，一个公司，能量都是守恒的。你多做了这件事，就少做了那件事。核心是聚焦。"
+
+危机类："十年来我天天思考的都是失败，对成功视而不见，也没有什么荣誉感、自豪感，而是危机感。" / "不确定性才是这个时代的确定性。华为要在不确定的环境中建立确定性的能力。"
+
+客户类："我们的奋斗目标，是给客户创造价值，而不是给客户创造感动。感动是短暂的，价值是持久的。"
+
+财务类："利润不是华为追求的目标，利润是华为活动的结果。" / "现金流比利润更重要。一家公司可以亏损，但不能没有现金。" / "有效增长的核心是：多打粮食（利润），同时提高土地肥力（能力建设）。"
+
+管理类："让听得见炮声的人呼叫炮火。" / "流程要简单，表单要简单，汇报要简单。复杂的流程是组织官僚化的表现。" / "机关要为一线服务，不能让机关控制一线。"
+
+创新类："华为已经进入无人区。前面没有灯塔，只有理论的灯塔。" / "创新不是为了创新而创新，是为了解决客户的真实问题。"
+
+---
+
+严格避免：泛泛表扬空洞的"做得很好"；过于学术化脱离实际的建议；只说问题不给出路；站在总部视角忽视一线现实；政治正确的废话。`
+  }
+};
+
+// ─── MODE SWITCH ───
+function selectMode(mode, el) {
+  currentMode = mode;
+  document.querySelectorAll('.skill-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  
+  const cfg = MODES[mode];
+  const panel = document.getElementById('inputPanel');
+  panel.className = 'input-panel ' + cfg.panelClass;
+  document.getElementById('modeTag').textContent = cfg.tag;
+  document.getElementById('inputHint').textContent = cfg.hint;
+  document.getElementById('userInput').placeholder = cfg.placeholder;
+  
+  // Update examples
+  const row = document.getElementById('examplesRow');
+  row.innerHTML = cfg.examples.map(e =>
+    `<span class="example-chip" onclick="fillExample(this)">${e}</span>`
+  ).join('');
+  
+  // Hide output
+  document.getElementById('outputPanel').classList.remove('visible');
+  document.getElementById('errorBox').classList.remove('visible');
+}
+
+// ─── CHAR COUNT ───
+document.getElementById('userInput').addEventListener('input', function() {
+  document.getElementById('charCount').textContent = this.value.length + ' / 2000';
+});
+
+// ─── FILL EXAMPLE ───
+function fillExample(el) {
+  document.getElementById('userInput').value = el.textContent;
+  document.getElementById('charCount').textContent = el.textContent.length + ' / 2000';
+}
+
+// ─── MARKDOWN RENDER ───
+function renderMarkdown(text) {
+  return text
+    .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+    .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/`(.*?)`/g, '<code>$1</code>')
+    .replace(/^---$/gim, '<hr>')
+    .replace(/^> (.*$)/gim, '<blockquote>$1</blockquote>')
+    .replace(/^\| (.+) \|$/gim, (match) => {
+      const cells = match.split('|').filter(c => c.trim() !== '');
+      if (cells.every(c => /^[-: ]+$/.test(c))) return '';
+      const tag = cells[0]?.includes('---') ? '' : null;
+      if (tag === null) {
+        const isHeader = cells.some(c => c.trim() === '机构' || c.trim() === '维度' || c.trim() === '情景' || c.trim() === '议题' || c.trim() === '参与方' || c.trim() === '行业' || c.trim() === '企业类型' || c.trim() === '时间' || c.trim() === '行业' || c.trim() === '字段');
+        if (isHeader) {
+          return '<tr>' + cells.map(c => `<th>${c.trim()}</th>`).join('') + '</tr>';
+        }
+        return '<tr>' + cells.map(c => `<td>${c.trim()}</td>`).join('') + '</tr>';
+      }
+      return '';
+    })
+    .replace(/(<tr>[\s\S]*?<\/tr>)+/g, match => `<table>${match}</table>`)
+    .replace(/^- (.*$)/gim, '<li>$1</li>')
+    .replace(/(<li>[\s\S]*?<\/li>)+/g, match => `<ul>${match}</ul>`)
+    .replace(/^\d+\. (.*$)/gim, '<li>$1</li>')
+    .replace(/\n\n/g, '</p><p>')
+    .replace(/^(?!<[hult]|<block|<hr|<\/[hult]|<\/block)(.+)$/gim, (m) => m.startsWith('<') ? m : `<p>${m}</p>`)
+    .replace(/<p><\/p>/g, '')
+    .replace(/\n/g, ' ');
+}
+
+// ─── RUN ANALYSIS ───
+async function runAnalysis() {
+  const input = document.getElementById('userInput').value.trim();
+  if (!input) {
+    document.getElementById('userInput').focus();
+    return;
+  }
+
+  const cfg = MODES[currentMode];
+  const btn = document.getElementById('submitBtn');
+  const loadingBar = document.getElementById('loadingBar');
+  const loadingStatus = document.getElementById('loadingStatus');
+  const outputPanel = document.getElementById('outputPanel');
+  const errorBox = document.getElementById('errorBox');
+
+  // Set state
+  btn.disabled = true;
+  loadingBar.classList.add('active');
+  loadingStatus.classList.add('active');
+  outputPanel.classList.remove('visible');
+  errorBox.classList.remove('visible');
+
+  const startTime = Date.now();
+
+  try {
+    const response = await fetch('/api/proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: cfg.system,
+        messages: [{ role: 'user', content: input }]
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error?.message || `HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    const resultText = data.content?.map(b => b.text || '').join('') || '';
+    const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+
+    // Render
+    document.getElementById('outputTitle').textContent = cfg.title;
+    document.getElementById('outputMeta').textContent = `生成耗时 ${elapsed}s · ${currentMode.toUpperCase()} MODE`;
+    document.getElementById('outputBody').innerHTML = renderMarkdown(resultText);
+    outputPanel.classList.add('visible');
+
+    // Scroll to output
+    setTimeout(() => outputPanel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+
+  } catch (err) {
+    errorBox.textContent = '⚠ 分析请求失败：' + err.message;
+    errorBox.classList.add('visible');
+  } finally {
+    btn.disabled = false;
+    loadingBar.classList.remove('active');
+    loadingStatus.classList.remove('active');
+  }
+}
+
+// ─── ENTER SHORTCUT ───
+document.getElementById('userInput').addEventListener('keydown', function(e) {
+  if (e.ctrlKey && e.key === 'Enter') runAnalysis();
+});
+</script>
+</body>
+</html>
