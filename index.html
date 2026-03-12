@@ -980,7 +980,7 @@ async function runAnalysis() {
       };
       if (tools) body.tools = tools;
 
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('/api/proxy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
