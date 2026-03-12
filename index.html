@@ -122,6 +122,32 @@
     display: flex; justify-content: space-between; align-items: center; }
   .char-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mist); }
 
+  /* URL PREVIEW */
+  .url-preview { display: none; margin: 0 24px 0; padding: 10px 14px;
+    background: rgba(200,168,75,0.06); border: 1px solid rgba(200,168,75,0.2);
+    border-radius: 4px; animation: fadeIn 0.3s ease; }
+  .url-preview.visible { display: flex; align-items: center; gap: 10px; }
+  .url-preview-icon { font-size: 16px; flex-shrink: 0; }
+  .url-preview-info { flex: 1; min-width: 0; }
+  .url-preview-type { font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 3px; }
+  .url-preview-type.web { color: #7aa3cc; }
+  .url-preview-type.youtube { color: #e8a070; }
+  .url-preview-url { font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--mist); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .url-preview-note { font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: rgba(107,122,141,0.6); margin-top: 2px; }
+  .url-question-row { display: none; padding: 0 24px 16px; gap: 10px; align-items: center; }
+  .url-question-row.visible { display: flex; }
+  .url-question-label { font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 2px; color: var(--mist); white-space: nowrap; }
+  .url-question-input { flex: 1; background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(200,168,75,0.2); border-radius: 3px; padding: 8px 12px;
+    color: var(--paper); font-family: 'Playfair Display', serif; font-size: 13px;
+    outline: none; caret-color: var(--gold); transition: border-color 0.2s; }
+  .url-question-input:focus { border-color: rgba(200,168,75,0.45); }
+  .url-question-input::placeholder { color: rgba(107,122,141,0.4); font-style: italic; }
+
   /* SUBMIT */
   .btn-submit { display: flex; align-items: center; gap: 10px; padding: 14px 32px;
     border: 1px solid var(--gold);
@@ -470,7 +496,22 @@
       <span class="input-mode-tag" id="modeTag">战略假设</span>
       <span class="input-hint" id="inputHint">描述您的战略假设或分析问题</span>
     </div>
-    <textarea id="userInput" placeholder="例如：假设美国在2025年对华半导体出口管制进一步升级，将如何影响中国科技产业的战略路径？" maxlength="2000"></textarea>
+    <textarea id="userInput" placeholder="例如：假设美国在2025年对华半导体出口管制进一步升级，将如何影响中国科技产业的战略路径？&#10;&#10;也可直接粘贴网页 URL 或 YouTube 链接" maxlength="2000"></textarea>
+    <!-- URL PREVIEW -->
+    <div class="url-preview" id="urlPreview">
+      <span class="url-preview-icon" id="urlIcon">🌐</span>
+      <div class="url-preview-info">
+        <div class="url-preview-type" id="urlType">网页</div>
+        <div class="url-preview-url" id="urlDisplay"></div>
+        <div class="url-preview-note" id="urlNote">将自动抓取页面内容进行分析</div>
+      </div>
+    </div>
+    <!-- OPTIONAL QUESTION FOR URL MODE -->
+    <div class="url-question-row" id="urlQuestionRow">
+      <span class="url-question-label">追加问题</span>
+      <input class="url-question-input" id="urlQuestion"
+        placeholder="可选：针对该内容你想分析什么？（留空则使用当前分析模式框架）">
+    </div>
     <div class="input-footer">
       <span class="char-count" id="charCount">0 / 2000</span>
     </div>
@@ -1182,14 +1223,59 @@ function clearConversation() {
 }
 
 // ════════════════════════════════════════════
+// URL DETECTION
+// ════════════════════════════════════════════
+function detectUrlType(text) {
+  const trimmed = text.trim();
+  // Must look like a standalone URL (single line, starts with http/https)
+  if (!/^https?:\/\/\S+$/i.test(trimmed)) return null;
+  try { new URL(trimmed); } catch(e) { return null; }
+  const ytMatch = trimmed.match(
+    /(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+  );
+  if (ytMatch) return { type: 'youtube', videoId: ytMatch[1], url: trimmed };
+  return { type: 'web', url: trimmed };
+}
+
+let currentUrlInfo = null;
+
+function updateUrlPreview(text) {
+  const info = detectUrlType(text);
+  currentUrlInfo = info;
+  const preview = document.getElementById('urlPreview');
+  const qrow = document.getElementById('urlQuestionRow');
+  if (!info) {
+    preview.classList.remove('visible');
+    qrow.classList.remove('visible');
+    return;
+  }
+  preview.classList.add('visible');
+  qrow.classList.add('visible');
+  if (info.type === 'youtube') {
+    document.getElementById('urlIcon').textContent = '▶';
+    document.getElementById('urlType').textContent = 'YouTube 视频';
+    document.getElementById('urlType').className = 'url-preview-type youtube';
+    document.getElementById('urlNote').textContent = '将抓取视频字幕 / 描述 / 标题进行分析';
+  } else {
+    document.getElementById('urlIcon').textContent = '🌐';
+    document.getElementById('urlType').textContent = '网页内容';
+    document.getElementById('urlType').className = 'url-preview-type web';
+    document.getElementById('urlNote').textContent = '将自动抓取页面正文进行分析';
+  }
+  document.getElementById('urlDisplay').textContent = info.url;
+}
+
+// ════════════════════════════════════════════
 // INPUT
 // ════════════════════════════════════════════
 document.getElementById('userInput').addEventListener('input', function() {
   document.getElementById('charCount').textContent = this.value.length + ' / 2000';
+  updateUrlPreview(this.value);
 });
 function fillExample(el) {
   document.getElementById('userInput').value = el.textContent;
   document.getElementById('charCount').textContent = el.textContent.length + ' / 2000';
+  updateUrlPreview(el.textContent);
 }
 
 // ─── MARKDOWN RENDER ───
@@ -1261,11 +1347,32 @@ async function callAPI(messages, systemPrompt, maxTokens, useSearch) {
 }
 
 // ════════════════════════════════════════════
+// FETCH URL CONTENT (via proxy)
+// ════════════════════════════════════════════
+async function fetchUrlContent(urlInfo, loadingStatus) {
+  loadingStatus.innerHTML = urlInfo.type === 'youtube'
+    ? '<span class="loading-dots">正在抓取 YouTube 字幕与元数据</span>'
+    : '<span class="loading-dots">正在抓取网页内容</span>';
+
+  const resp = await fetch('/api/fetch-url', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: urlInfo.url, type: urlInfo.type, videoId: urlInfo.videoId || null })
+  });
+  if (!resp.ok) {
+    const e = await resp.json().catch(() => ({}));
+    throw new Error(e.error || `抓取失败 HTTP ${resp.status}`);
+  }
+  return await resp.json(); // { content, title, type }
+}
+
+// ════════════════════════════════════════════
 // MAIN ANALYSIS
 // ════════════════════════════════════════════
 async function runAnalysis() {
-  const input = document.getElementById('userInput').value.trim();
-  if (!input) { document.getElementById('userInput').focus(); return; }
+  const rawInput = document.getElementById('userInput').value.trim();
+  if (!rawInput) { document.getElementById('userInput').focus(); return; }
+
   const cfg = MODES[currentMode];
   const depthCfg = DEPTH_CONFIG[currentDepth];
   const btn = document.getElementById('submitBtn');
@@ -1273,39 +1380,63 @@ async function runAnalysis() {
   const loadingStatus = document.getElementById('loadingStatus');
   const outputPanel = document.getElementById('outputPanel');
   const errorBox = document.getElementById('errorBox');
+
   btn.disabled = true; loadingBar.classList.add('active'); loadingStatus.classList.add('active');
   outputPanel.classList.remove('visible'); errorBox.classList.remove('visible');
   loadingStatus.innerHTML = '<span class="loading-dots">正在调用战略分析模型</span>';
+
   const startTime = Date.now();
   const useSearch = ['trump','hypothesis'].includes(currentMode);
   const maxTokens = useSearch ? Math.max(depthCfg.maxTokens, 8000) : depthCfg.maxTokens;
   const today = new Date().toLocaleDateString('zh-CN', {year:'numeric',month:'long',day:'numeric'});
   const systemPrompt = cfg.system + depthCfg.suffix + `\n\n今天的日期是：${today}。` +
     (useSearch ? '分析时必须基于最新实时信息，优先通过搜索工具获取当前数据。' : '');
+
   try {
-    const { text, searchCount } = await callAPI([{role:'user',content:input}], systemPrompt, maxTokens, useSearch);
+    let userMessage = rawInput;
+    let historyQuery = rawInput.slice(0, 120);
+    let sourceInfo = '';
+
+    // ── URL MODE ──
+    if (currentUrlInfo) {
+      const fetched = await fetchUrlContent(currentUrlInfo, loadingStatus);
+      const extraQ = document.getElementById('urlQuestion').value.trim();
+      const sourceLabel = currentUrlInfo.type === 'youtube' ? `YouTube 视频《${fetched.title}》` : `网页《${fetched.title || currentUrlInfo.url}》`;
+      userMessage = `以下是${sourceLabel}的完整内容：\n\n---\n${fetched.content}\n---\n\n` +
+        (extraQ ? `请针对以上内容，回答：${extraQ}` : `请使用当前分析框架对以上内容进行深度战略分析。`);
+      historyQuery = `[${currentUrlInfo.type === 'youtube' ? 'YouTube' : '网页'}] ${fetched.title || currentUrlInfo.url}`.slice(0, 120);
+      sourceInfo = ` · ${currentUrlInfo.type === 'youtube' ? '▶ YouTube' : '🌐 网页'}`;
+      loadingStatus.innerHTML = '<span class="loading-dots">内容已获取，正在分析</span>';
+    }
+
+    const { text, searchCount } = await callAPI([{role:'user', content: userMessage}], systemPrompt, maxTokens, useSearch);
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
-    const searchInfo = searchCount > 0 ? ` · 🔍 ${searchCount}次实时搜索` : '';
+    const searchInfo = searchCount > 0 ? ` · 🔍 ${searchCount}次搜索` : '';
+
     currentReportText = text;
     currentReportTitle = cfg.title;
     lastSystemPrompt = systemPrompt;
-    // Save to history
+
     const histItem = { id: Date.now().toString(), mode: currentMode, depth: depthCfg.label,
-      query: input.slice(0,120), title: cfg.title, result: text, ts: Date.now(), starred: false };
+      query: historyQuery, title: cfg.title, result: text, ts: Date.now(), starred: false };
     currentHistoryId = addToHistory(histItem);
     document.getElementById('starBtn').textContent = '☆ 收藏';
-    // Render
+
     document.getElementById('outputTitle').textContent = cfg.title;
-    document.getElementById('outputMeta').textContent = `生成耗时 ${elapsed}s · ${currentMode.toUpperCase()} · ${depthCfg.label}${searchInfo}`;
+    document.getElementById('outputMeta').textContent =
+      `生成耗时 ${elapsed}s · ${currentMode.toUpperCase()} · ${depthCfg.label}${sourceInfo}${searchInfo}`;
     document.getElementById('outputBody').innerHTML = renderMarkdown(text);
     outputPanel.classList.add('visible');
-    conversationHistory = [{role:'user',content:input},{role:'assistant',content:text}];
+
+    conversationHistory = [{role:'user', content: userMessage}, {role:'assistant', content: text}];
     document.getElementById('convHistory').innerHTML = '';
     document.getElementById('followupPanel').classList.add('visible');
     document.getElementById('followupInput').value = '';
-    setTimeout(() => outputPanel.scrollIntoView({behavior:'smooth',block:'start'}), 100);
+    setTimeout(() => outputPanel.scrollIntoView({behavior:'smooth', block:'start'}), 100);
+
   } catch(err) {
-    errorBox.textContent = '⚠ 分析请求失败：' + err.message; errorBox.classList.add('visible');
+    errorBox.textContent = '⚠ 分析请求失败：' + err.message;
+    errorBox.classList.add('visible');
   } finally {
     btn.disabled = false; loadingBar.classList.remove('active'); loadingStatus.classList.remove('active');
   }
