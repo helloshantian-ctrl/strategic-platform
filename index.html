@@ -94,7 +94,7 @@
     color: var(--mist); margin-bottom: 20px;
   }
   .skill-tabs {
-    display: grid; grid-template-columns: repeat(3, 1fr);
+    display: grid; grid-template-columns: repeat(4, 1fr);
     gap: 12px; margin-bottom: 40px;
   }
   .skill-tab {
@@ -170,6 +170,7 @@
   .mode-policy .input-mode-tag { background: rgba(90,125,82,0.2); color: #8fba87; }
   .mode-critical .input-mode-tag { background: rgba(92,122,158,0.2); color: #7aa3cc; }
   .mode-ren .input-mode-tag { background: rgba(90,125,82,0.2); color: #8fba87; }
+  .mode-trump .input-mode-tag { background: rgba(139,26,26,0.2); color: #e8a070; }
 
   .input-hint { font-size: 12px; color: var(--mist); font-family: 'JetBrains Mono', monospace; }
 
@@ -362,6 +363,9 @@
   }
 
   /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .skill-tabs { grid-template-columns: repeat(2, 1fr); }
+  }
   @media (max-width: 700px) {
     .skill-tabs { grid-template-columns: 1fr; }
     header { flex-direction: column; align-items: flex-start; gap: 16px; }
@@ -409,6 +413,13 @@
       <div class="tab-num">MODE 03</div>
       <div class="tab-title">任正非视角审视</div>
       <div class="tab-desc">华为经营哲学<br>犀利务实直指要害</div>
+    </div>
+
+    <div class="skill-tab" data-mode="trump" onclick="selectMode('trump', this)">
+      <span class="tab-icon">🎲</span>
+      <div class="tab-num">MODE 04</div>
+      <div class="tab-title">懂王冲突剧本</div>
+      <div class="tab-desc">Kobeissi 10步框架<br>阶段定位·市场推演</div>
     </div>
 
   </div>
@@ -554,7 +565,9 @@ const MODES = {
 ### 💡 战略含义
 [对决策者的核心建议，3-5条，简洁有力]
 
-保持客观中立，数据驱动，金字塔原理（结论先行）。`
+保持客观中立，数据驱动，金字塔原理（结论先行）。
+
+**强制执行：** 若假设涉及当前或近期事件，必须先使用web_search工具搜索最新相关数据和动态，再基于实时信息构建分析框架。`
   },
   critical: {
     tag: '独立批判',
@@ -727,6 +740,115 @@ const MODES = {
 ---
 
 严格避免：泛泛表扬空洞的"做得很好"；过于学术化脱离实际的建议；只说问题不给出路；站在总部视角忽视一线现实；政治正确的废话。`
+  },
+  trump: {
+    tag: '懂王剧本',
+    hint: '描述正在分析的特朗普冲突事件，或询问当前处于哪个阶段',
+    title: '特朗普冲突剧本分析报告',
+    placeholder: '例如：当前美伊冲突处于哪个阶段？油价走势和市场下一步会怎样？特朗普最新表态意味着什么？',
+    examples: ['美伊冲突现在第几步', '关税战剧本推演', '中美贸易战下一步'],
+    panelClass: 'mode-trump',
+    system: `你是专注于特朗普政治经济学的顶级宏观策略分析师，深度内化了The Kobeissi Letter系统性复盘的"10步冲突模式"框架。
+
+核心框架——特朗普冲突10步剧本：
+
+【第1步｜口头施压】Truth Social/公开声明释放威胁信号，持续数周至数月。市场影响有限（"狼来了"折扣）。
+
+【第2步｜战略姿态展示】军事部署、盟友协调、可见准备动作，强化可信度。风险溢价小幅抬升。
+
+【第3步｜周五夜袭】重大行动高度集中于周五夜间至周六凌晨（美东时间）。逻辑：避免交易时段流动性危机；给市场周末消化时间；为自身保留观察与谈判窗口。历史案例：美以空袭伊朗（6/21）、对华100%关税（10/10）、委内瑞拉领空（11/29）、伊朗二次空袭（2/28）。
+
+【第4步｜市场乐观定价】周日夜盘剧烈波动，但因"特朗普爱做交易"信仰，周一开盘前部分修复。若修复后再度走低，说明乐观已被消耗。
+
+【第5步｜"打多久都行"反向刺破】特朗普公开表达"可以无限期对抗"，戳破抄底逻辑。关键语言：含"forever"/"unlimited"/"as long as it takes"。本质是谈判话术，展示耐受上限以施压。
+
+【第6步｜市场结构性重定价】三次探底完成，心理结构性转变：第一次被买（预期协议）→ 第二次被买（认为暂时）→ 第三次仓位结构性改变。指标：油价突破阻力、股指创新低、防御资金流出加速、VIX走高。
+
+【第7步｜有条件降级信号】模糊但带条件的降温措辞出现——不是撤退，是试探。语言标志："very soon"/"deal is possible"但附条件。此信号出现于市场已充分计价"持续冲突"之后。
+
+【第8步｜市场-政治反馈回路】金融市场成为谈判工具。特朗普三优先级：①做"和平总统" ②压通胀 ③降汽油价格。关键阈值：布伦特油价>90美元/桶；标普跌幅≥5%；美国汽油价格+10%。摩根大通测算：霍尔木兹封锁→油价120-130→CPI飙至5%。
+
+【第9步｜协议框架与叙事构建】"极限施压换取让步"叙事收场。叙事框架重要性>协议实质细节。历史规律：自2025年1月就职，特朗普参与的每一场冲突均以协议告终。
+
+【第10步｜暴力重定价与胜利宣示】协议后市场重定价突然而非渐进（投资者普遍处于防御仓位）。历史案例：2025年4月/8月/10月及2026年1月每次关税暂停后均急涨。
+
+---
+
+严格按以下结构输出（使用Markdown格式）：
+
+## 📌 冲突快照
+
+**事件：** [冲突名称]
+**当前所处阶段：** Step [X] — [阶段名称]
+**置信度：** [高/中/低] | **理由：** [一句话]
+
+---
+
+## 🗺️ 阶段定位与路径复盘
+
+**已发生阶段回顾：**
+
+| 步骤 | 阶段名称 | 关键事件 | 时间 |
+|------|---------|---------|------|
+[填写已发生的步骤]
+
+**当前阶段深度分析：**
+[对比框架特征与现实事件，说明为什么判断处于此阶段，并与历史样本对比]
+
+**与历史样本的差异点：**
+[指出此次冲突哪些地方偏离了经典剧本，及其含义]
+
+---
+
+## 📊 市场状态矩阵
+
+| 资产类别 | 当前状态 | 该阶段历史表现 | 偏差判断 |
+|---------|---------|-------------|---------|
+| 标普500 | | | |
+| 布伦特原油 | | | |
+| 美债10Y收益率 | | | |
+| 美元指数 | | | |
+| 黄金 | | | |
+| VIX | | | |
+
+**关键阈值监测状态：**
+- 布伦特原油 vs 预警线90美元：[状态]
+- 标普跌幅 vs 预警线-5%：[状态]
+- 汽油价格涨幅 vs 预警线+10%：[状态]
+
+---
+
+## 🔮 未来2-4周情景推演
+
+**情景A — 短暂升级后急速反转（概率：X%）**
+触发条件 → 市场路径 → 交易含义
+
+**情景B — 可控延续等待协议（概率：Y%）**
+触发条件 → 市场路径 → 交易含义
+
+**情景C — 区域升级超预期扩散（概率：Z%）**
+触发条件 → 市场路径 → 交易含义
+
+**触发协议的关键催化剂：**
+1. [催化剂1]
+2. [催化剂2]
+
+---
+
+## 💼 交易策略含义
+
+**当前阶段历史对应的最优交易逻辑：**
+[基于10步框架，当前阶段在历史上最优的仓位方向]
+
+> **核心原则：** 特朗普是交易撮合者，不是战争制造者。自2025年1月就职以来，参与的每一场冲突均以协议告终。跟随规律，方有回报。
+
+**风险提示：** 本分析基于历史模式研判，不构成投资建议。历史剧本可能因结构性因素偏离。
+
+---
+
+分析规范：每个阶段判断必须对应具体事件，不得空泛；三种情景概率之和=100%；必须指出当前冲突与历史样本的异同；标注分析所依据的信息截止时间。
+
+**强制执行：** 在生成任何分析之前，必须先使用web_search工具搜索该冲突的最新进展、当前市场数据（油价/股市/VIX）和最新新闻。至少执行3次搜索：①冲突最新动态 ②当前油价及市场数据 ③特朗普最新表态。基于实时数据生成分析，明确标注数据来源和时间。`
   }
 };
 
@@ -822,31 +944,96 @@ async function runAnalysis() {
 
   const startTime = Date.now();
 
-  try {
-    const response = await fetch('/api/proxy', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        system: cfg.system,
-        messages: [{ role: 'user', content: input }]
-      })
-    });
+  // Modes that require real-time web search
+  const SEARCH_MODES = ['trump', 'hypothesis'];
 
-    if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      throw new Error(err.error?.message || `HTTP ${response.status}`);
+  // Build tools array for search-enabled modes
+  const useSearch = SEARCH_MODES.includes(currentMode);
+  const tools = useSearch ? [{ type: 'web_search_20250305', name: 'web_search' }] : undefined;
+  const maxTokens = useSearch ? 8000 : 5000;
+
+  // Today's date injected into system prompt for grounding
+  const today = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+  const datedSystem = cfg.system + `\n\n今天的日期是：${today}。分析时必须基于最新实时信息，优先通过搜索工具获取当前数据。`;
+
+  try {
+    // Agentic loop: keep calling API until no more tool_use blocks
+    let messages = [{ role: 'user', content: input }];
+    let finalText = '';
+    let searchCount = 0;
+    const MAX_ROUNDS = 8;
+
+    for (let round = 0; round < MAX_ROUNDS; round++) {
+      // Update loading status
+      const statusEl = document.getElementById('loadingStatus');
+      if (searchCount > 0) {
+        statusEl.innerHTML = `<span>已完成 ${searchCount} 次实时搜索，正在生成分析报告</span><span class="loading-dots"></span>`;
+      } else {
+        statusEl.innerHTML = `<span class="loading-dots">正在调用战略分析模型</span>`;
+      }
+
+      const body = {
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: maxTokens,
+        system: datedSystem,
+        messages
+      };
+      if (tools) body.tools = tools;
+
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error?.message || `HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      // Collect all text blocks from this round
+      const textBlocks = data.content?.filter(b => b.type === 'text') || [];
+      const toolUseBlocks = data.content?.filter(b => b.type === 'tool_use') || [];
+
+      // Accumulate any text output
+      finalText += textBlocks.map(b => b.text).join('');
+
+      // If no tool calls, we're done
+      if (toolUseBlocks.length === 0 || data.stop_reason === 'end_turn') break;
+
+      // Process tool calls — execute web searches
+      searchCount += toolUseBlocks.length;
+
+      // Update status with search queries
+      const queries = toolUseBlocks.map(t => t.input?.query || '').filter(Boolean);
+      if (queries.length) {
+        document.getElementById('loadingStatus').innerHTML =
+          `<span>正在搜索：${queries.join(' / ')}</span><span class="loading-dots"></span>`;
+      }
+
+      // Add assistant message with tool use to history
+      messages.push({ role: 'assistant', content: data.content });
+
+      // Add tool results back — the browser's API proxy handles actual search execution
+      // For web_search_20250305, results come back in the next assistant turn automatically
+      // We just need to add empty tool_result placeholders to satisfy the message format
+      const toolResults = toolUseBlocks.map(t => ({
+        type: 'tool_result',
+        tool_use_id: t.id,
+        content: '' // API fills this in server-side for web_search
+      }));
+      messages.push({ role: 'user', content: toolResults });
     }
 
-    const data = await response.json();
-    const resultText = data.content?.map(b => b.text || '').join('') || '';
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+    const searchInfo = searchCount > 0 ? ` · 🔍 ${searchCount}次实时搜索` : '';
 
     // Render
     document.getElementById('outputTitle').textContent = cfg.title;
-    document.getElementById('outputMeta').textContent = `生成耗时 ${elapsed}s · ${currentMode.toUpperCase()} MODE`;
-    document.getElementById('outputBody').innerHTML = renderMarkdown(resultText);
+    document.getElementById('outputMeta').textContent = `生成耗时 ${elapsed}s · ${currentMode.toUpperCase()} MODE${searchInfo}`;
+    document.getElementById('outputBody').innerHTML = renderMarkdown(finalText);
     outputPanel.classList.add('visible');
 
     // Scroll to output
