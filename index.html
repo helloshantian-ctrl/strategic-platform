@@ -8,368 +8,357 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Han+Serif+CN:wght@300;400;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #0a0a0f;
-    --paper: #f5f2ec;
-    --cream: #ede8df;
-    --steel: #1a2235;
-    --navy: #0d1b2a;
-    --gold: #c8a84b;
-    --gold-light: #e4c97e;
-    --red-accent: #8b1a1a;
-    --blue-accent: #1a3a5c;
-    --sage: #4a6741;
-    --mist: #6b7a8d;
-    --border: rgba(200, 168, 75, 0.3);
-    --shadow: 0 20px 60px rgba(10,10,15,0.3);
+    --ink: #0a0a0f; --paper: #f5f2ec; --cream: #ede8df;
+    --steel: #1a2235; --navy: #0d1b2a;
+    --gold: #c8a84b; --gold-light: #e4c97e;
+    --red-accent: #8b1a1a; --blue-accent: #1a3a5c;
+    --sage: #4a6741; --mist: #6b7a8d;
+    --border: rgba(200,168,75,0.3);
+    --font-size: 15px;
   }
-
+  body.light-mode {
+    --navy: #f0ece3; --paper: #1a1a1a; --mist: #555;
+    --gold: #a07830; --gold-light: #8b6520;
+  }
+  body.light-mode .bg-texture {
+    background: radial-gradient(ellipse 80% 50% at 20% 10%, rgba(200,168,75,0.1) 0%, transparent 60%),
+      linear-gradient(160deg, #f0ece3 0%, #e8e2d8 100%);
+  }
+  body.light-mode .bg-grid {
+    background-image: linear-gradient(rgba(160,120,48,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(160,120,48,0.07) 1px, transparent 1px);
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Playfair Display', 'Source Han Serif CN', serif;
+    background: var(--navy); color: var(--paper);
+    min-height: 100vh; overflow-x: hidden;
+    font-size: var(--font-size); transition: background 0.3s, color 0.3s; }
 
-  body {
-    font-family: 'Playfair Display', 'Source Han Serif CN', serif;
-    background: var(--navy);
-    color: var(--paper);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ─── BACKGROUND ─── */
-  .bg-texture {
-    position: fixed; inset: 0; z-index: 0;
-    background:
-      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(200,168,75,0.06) 0%, transparent 60%),
+  /* BG */
+  .bg-texture { position: fixed; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse 80% 50% at 20% 10%, rgba(200,168,75,0.06) 0%, transparent 60%),
       radial-gradient(ellipse 60% 70% at 80% 90%, rgba(26,58,92,0.4) 0%, transparent 60%),
-      linear-gradient(160deg, #0d1b2a 0%, #0a1320 40%, #050d18 100%);
-  }
-  .bg-grid {
-    position: fixed; inset: 0; z-index: 0;
-    background-image:
-      linear-gradient(rgba(200,168,75,0.04) 1px, transparent 1px),
+      linear-gradient(160deg, #0d1b2a 0%, #0a1320 40%, #050d18 100%); }
+  .bg-grid { position: fixed; inset: 0; z-index: 0;
+    background-image: linear-gradient(rgba(200,168,75,0.04) 1px, transparent 1px),
       linear-gradient(90deg, rgba(200,168,75,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-  }
+    background-size: 60px 60px; }
 
-  /* ─── LAYOUT ─── */
-  .container {
-    position: relative; z-index: 1;
-    max-width: 1100px; margin: 0 auto;
-    padding: 0 32px 80px;
-  }
+  /* LAYOUT */
+  .container { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 32px 80px; }
 
-  /* ─── HEADER ─── */
-  header {
-    padding: 48px 0 36px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 52px;
-    display: flex; align-items: flex-end; justify-content: space-between;
-  }
-  .logo-block {}
-  .logo-en {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
-    color: var(--gold); opacity: 0.7; margin-bottom: 8px;
-  }
-  .logo-zh {
-    font-size: 32px; font-weight: 900; letter-spacing: -1px;
-    color: var(--paper);
-    text-shadow: 0 0 40px rgba(200,168,75,0.2);
-  }
-  .logo-sub {
-    font-size: 13px; color: var(--mist); font-weight: 300;
-    font-family: 'JetBrains Mono', monospace; letter-spacing: 2px;
-    margin-top: 6px;
-  }
-  .header-badge {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-    color: var(--gold); border: 1px solid var(--border);
-    padding: 6px 14px; border-radius: 2px;
-    background: rgba(200,168,75,0.05);
-  }
+  /* HEADER */
+  header { padding: 48px 0 36px; border-bottom: 1px solid var(--border);
+    margin-bottom: 52px; display: flex; align-items: flex-end; justify-content: space-between; }
+  .logo-en { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--gold); opacity: 0.7; margin-bottom: 8px; }
+  .logo-zh { font-size: 32px; font-weight: 900; letter-spacing: -1px; color: var(--paper); }
+  .logo-sub { font-size: 13px; color: var(--mist); font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 2px; margin-top: 6px; }
+  .header-right { display: flex; align-items: center; gap: 12px; }
+  .header-badge { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gold); border: 1px solid var(--border);
+    padding: 6px 14px; border-radius: 2px; background: rgba(200,168,75,0.05); }
 
-  /* ─── SKILL SELECTOR ─── */
-  .section-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px; letter-spacing: 4px; text-transform: uppercase;
-    color: var(--mist); margin-bottom: 20px;
-  }
-  .skill-tabs {
-    display: grid; grid-template-columns: repeat(4, 1fr);
-    gap: 12px; margin-bottom: 40px;
-  }
-  .skill-tab {
-    cursor: pointer;
-    padding: 24px 20px;
-    border: 1px solid rgba(200,168,75,0.15);
-    background: rgba(255,255,255,0.02);
-    border-radius: 4px;
-    transition: all 0.3s ease;
-    position: relative; overflow: hidden;
-  }
-  .skill-tab::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: var(--gold); transform: scaleX(0); transition: transform 0.3s ease;
-    transform-origin: left;
-  }
+  /* TOOLBAR */
+  .toolbar { display: flex; align-items: center; gap: 8px; }
+  .toolbar-btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1px;
+    padding: 5px 12px; border: 1px solid rgba(200,168,75,0.2); border-radius: 2px;
+    background: transparent; color: var(--mist); cursor: pointer; transition: all 0.2s; }
+  .toolbar-btn:hover { color: var(--gold); border-color: rgba(200,168,75,0.5); }
+  .toolbar-btn.active { color: var(--gold); border-color: var(--gold); background: rgba(200,168,75,0.08); }
+  .font-size-group { display: flex; gap: 4px; }
+
+  /* SECTION LABEL */
+  .section-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 4px;
+    text-transform: uppercase; color: var(--mist); margin-bottom: 20px; }
+
+  /* SKILL TABS */
+  .skill-tabs { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 40px; }
+  .skill-tab { cursor: pointer; padding: 24px 20px; border: 1px solid rgba(200,168,75,0.15);
+    background: rgba(255,255,255,0.02); border-radius: 4px; transition: all 0.3s;
+    position: relative; overflow: hidden; }
+  .skill-tab::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--gold); transform: scaleX(0); transition: transform 0.3s; transform-origin: left; }
   .skill-tab:hover { border-color: rgba(200,168,75,0.35); background: rgba(255,255,255,0.04); }
-  .skill-tab:hover::before { transform: scaleX(1); }
-  .skill-tab.active {
-    border-color: var(--gold);
-    background: rgba(200,168,75,0.07);
-    box-shadow: 0 0 30px rgba(200,168,75,0.1), inset 0 0 20px rgba(200,168,75,0.03);
-  }
-  .skill-tab.active::before { transform: scaleX(1); }
+  .skill-tab:hover::before, .skill-tab.active::before { transform: scaleX(1); }
+  .skill-tab.active { border-color: var(--gold); background: rgba(200,168,75,0.07);
+    box-shadow: 0 0 30px rgba(200,168,75,0.1); }
+  .tab-icon { font-size: 22px; margin-bottom: 12px; display: block; }
+  .tab-num { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px; color: var(--mist); margin-bottom: 8px; }
+  .tab-title { font-size: 15px; font-weight: 700; color: var(--paper); margin-bottom: 6px; }
+  .tab-desc { font-size: 11px; color: var(--mist); line-height: 1.6; font-family: 'JetBrains Mono', monospace; font-weight: 300; }
 
-  .skill-tab.active-hyp { --tab-color: #c8a84b; }
-  .skill-tab.active-event { --tab-color: #5c7a9e; }
-  .skill-tab.active-policy { --tab-color: #5a7d52; }
+  /* DEPTH ROW */
+  .depth-row { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; }
+  .depth-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--mist); white-space: nowrap; margin-right: 4px; }
+  .depth-btn { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; padding: 6px 16px; border-radius: 2px; cursor: pointer;
+    border: 1px solid rgba(200,168,75,0.2); background: transparent; color: var(--mist); transition: all 0.2s; }
+  .depth-btn:hover { border-color: rgba(200,168,75,0.5); color: var(--gold); }
+  .depth-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(200,168,75,0.1); }
 
-  .tab-icon {
-    font-size: 22px; margin-bottom: 12px; display: block;
-    filter: grayscale(0.3);
-  }
-  .tab-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px; letter-spacing: 3px; color: var(--mist);
-    margin-bottom: 8px;
-  }
-  .tab-title {
-    font-size: 15px; font-weight: 700; color: var(--paper);
-    margin-bottom: 6px; line-height: 1.3;
-  }
-  .tab-desc {
-    font-size: 11px; color: var(--mist); line-height: 1.6;
-    font-family: 'JetBrains Mono', monospace; font-weight: 300;
-  }
-
-  /* ─── INPUT PANEL ─── */
-  .input-panel {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(200,168,75,0.15);
-    border-radius: 6px;
-    overflow: hidden;
-    margin-bottom: 32px;
-    transition: border-color 0.3s;
-  }
+  /* INPUT PANEL */
+  .input-panel { background: rgba(255,255,255,0.02); border: 1px solid rgba(200,168,75,0.15);
+    border-radius: 6px; overflow: hidden; margin-bottom: 32px; transition: border-color 0.3s; }
   .input-panel:focus-within { border-color: rgba(200,168,75,0.4); }
-
-  .input-header {
-    padding: 16px 24px;
-    border-bottom: 1px solid rgba(200,168,75,0.1);
-    display: flex; align-items: center; gap: 12px;
-    background: rgba(255,255,255,0.02);
-  }
-  .input-mode-tag {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
-    padding: 4px 10px; border-radius: 2px;
-    transition: all 0.3s;
-  }
+  .input-header { padding: 16px 24px; border-bottom: 1px solid rgba(200,168,75,0.1);
+    display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); }
+  .input-mode-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px;
+    text-transform: uppercase; padding: 4px 10px; border-radius: 2px; transition: all 0.3s; }
   .mode-hyp .input-mode-tag { background: rgba(200,168,75,0.15); color: var(--gold); }
   .mode-event .input-mode-tag { background: rgba(92,122,158,0.2); color: #7aa3cc; }
   .mode-policy .input-mode-tag { background: rgba(90,125,82,0.2); color: #8fba87; }
   .mode-critical .input-mode-tag { background: rgba(92,122,158,0.2); color: #7aa3cc; }
   .mode-ren .input-mode-tag { background: rgba(90,125,82,0.2); color: #8fba87; }
   .mode-trump .input-mode-tag { background: rgba(139,26,26,0.2); color: #e8a070; }
-
   .input-hint { font-size: 12px; color: var(--mist); font-family: 'JetBrains Mono', monospace; }
-
-  textarea {
-    width: 100%; min-height: 160px;
-    background: transparent; border: none; outline: none; resize: vertical;
-    color: var(--paper); font-family: 'Playfair Display', serif;
-    font-size: 16px; line-height: 1.7; padding: 24px;
-    caret-color: var(--gold);
-  }
+  textarea { width: 100%; min-height: 160px; background: transparent; border: none; outline: none;
+    resize: vertical; color: var(--paper); font-family: 'Playfair Display', serif;
+    font-size: var(--font-size); line-height: 1.7; padding: 24px; caret-color: var(--gold); }
   textarea::placeholder { color: rgba(107,122,141,0.5); font-style: italic; }
+  .input-footer { padding: 14px 24px; border-top: 1px solid rgba(200,168,75,0.08);
+    display: flex; justify-content: space-between; align-items: center; }
+  .char-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mist); }
 
-  .input-footer {
-    padding: 14px 24px;
-    border-top: 1px solid rgba(200,168,75,0.08);
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .char-count {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; color: var(--mist);
-  }
-
-  /* ─── SUBMIT BUTTON ─── */
-  .btn-submit {
-    display: flex; align-items: center; gap: 10px;
-    padding: 14px 32px;
+  /* SUBMIT */
+  .btn-submit { display: flex; align-items: center; gap: 10px; padding: 14px 32px;
     border: 1px solid var(--gold);
     background: linear-gradient(135deg, rgba(200,168,75,0.15), rgba(200,168,75,0.05));
-    color: var(--gold);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
-    cursor: pointer; border-radius: 3px;
-    transition: all 0.3s ease; width: 100%;
-    justify-content: center; margin-bottom: 20px;
-  }
-  .btn-submit:hover:not(:disabled) {
-    background: linear-gradient(135deg, rgba(200,168,75,0.25), rgba(200,168,75,0.1));
-    box-shadow: 0 0 20px rgba(200,168,75,0.2);
-    transform: translateY(-1px);
-  }
+    color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 3px; text-transform: uppercase; cursor: pointer; border-radius: 3px;
+    transition: all 0.3s; width: 100%; justify-content: center; margin-bottom: 20px; }
+  .btn-submit:hover:not(:disabled) { background: linear-gradient(135deg,rgba(200,168,75,0.25),rgba(200,168,75,0.1));
+    box-shadow: 0 0 20px rgba(200,168,75,0.2); transform: translateY(-1px); }
   .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
   .btn-arrow { font-size: 16px; transition: transform 0.3s; }
   .btn-submit:hover:not(:disabled) .btn-arrow { transform: translateX(4px); }
 
-  /* ─── LOADING ─── */
-  .loading-bar {
-    height: 2px; background: rgba(200,168,75,0.1);
-    border-radius: 1px; overflow: hidden; margin-bottom: 32px;
-    display: none;
-  }
+  /* LOADING */
+  .loading-bar { height: 2px; background: rgba(200,168,75,0.1); border-radius: 1px;
+    overflow: hidden; margin-bottom: 32px; display: none; }
   .loading-bar.active { display: block; }
-  .loading-fill {
-    height: 100%;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    width: 40%; animation: sweep 1.5s ease-in-out infinite;
-  }
-  @keyframes sweep {
-    0% { transform: translateX(-200%); }
-    100% { transform: translateX(400%); }
-  }
-
-  .loading-status {
-    text-align: center; padding: 40px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px; letter-spacing: 2px; color: var(--mist);
-    display: none;
-  }
+  .loading-fill { height: 100%; background: linear-gradient(90deg,transparent,var(--gold),transparent);
+    width: 40%; animation: sweep 1.5s ease-in-out infinite; }
+  @keyframes sweep { 0%{transform:translateX(-200%)} 100%{transform:translateX(400%)} }
+  .loading-status { text-align: center; padding: 40px; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 2px; color: var(--mist); display: none; }
   .loading-status.active { display: block; }
-  .loading-dots::after {
-    content: ''; animation: dots 1.5s infinite;
-  }
-  @keyframes dots {
-    0%,20% { content: '.'; }
-    40%,60% { content: '..'; }
-    80%,100% { content: '...'; }
-  }
+  .loading-dots::after { content: ''; animation: dots 1.5s infinite; }
+  @keyframes dots { 0%,20%{content:'.'} 40%,60%{content:'..'} 80%,100%{content:'...'} }
 
-  /* ─── OUTPUT PANEL ─── */
-  .output-panel {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid rgba(200,168,75,0.2);
-    border-radius: 6px; overflow: hidden;
-    display: none; animation: fadeIn 0.5s ease;
-  }
+  /* OUTPUT */
+  .output-panel { background: rgba(255,255,255,0.02); border: 1px solid rgba(200,168,75,0.2);
+    border-radius: 6px; overflow: hidden; display: none; animation: fadeIn 0.5s ease; }
   .output-panel.visible { display: block; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-
-  .output-header {
-    padding: 16px 24px;
-    border-bottom: 1px solid rgba(200,168,75,0.1);
+  @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  .output-header { padding: 16px 24px; border-bottom: 1px solid rgba(200,168,75,0.1);
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(200,168,75,0.04);
-  }
-  .output-title {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold);
-  }
-  .output-meta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px; color: var(--mist); letter-spacing: 1px;
-  }
+    background: rgba(200,168,75,0.04); flex-wrap: wrap; gap: 10px; }
+  .output-header-left { display: flex; flex-direction: column; gap: 4px; }
+  .output-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold); }
+  .output-meta { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--mist); }
 
-  .output-body {
-    padding: 32px;
-    max-height: 600px; overflow-y: auto;
-    line-height: 1.8; font-size: 15px; color: rgba(245,242,236,0.9);
-  }
+  /* EXPORT BUTTONS */
+  .export-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .btn-export { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px;
+    text-transform: uppercase; padding: 5px 12px; border-radius: 2px;
+    border: 1px solid rgba(200,168,75,0.25); background: transparent; color: var(--mist);
+    cursor: pointer; transition: all 0.2s; }
+  .btn-export:hover { color: var(--gold); border-color: rgba(200,168,75,0.6); background: rgba(200,168,75,0.08); }
+
+  .output-body { padding: 32px; line-height: 1.8; color: rgba(245,242,236,0.9); }
   .output-body::-webkit-scrollbar { width: 4px; }
-  .output-body::-webkit-scrollbar-track { background: transparent; }
   .output-body::-webkit-scrollbar-thumb { background: rgba(200,168,75,0.3); border-radius: 2px; }
-
-  /* Markdown-style rendering */
-  .output-body h2 {
-    font-size: 20px; font-weight: 700; color: var(--gold-light);
-    margin: 28px 0 14px; padding-bottom: 8px;
-    border-bottom: 1px solid rgba(200,168,75,0.2);
-  }
-  .output-body h3 {
-    font-size: 16px; font-weight: 700; color: var(--paper);
-    margin: 20px 0 10px;
-  }
+  .output-body h2 { font-size: 20px; font-weight: 700; color: var(--gold-light);
+    margin: 28px 0 14px; padding-bottom: 8px; border-bottom: 1px solid rgba(200,168,75,0.2); }
+  .output-body h3 { font-size: 16px; font-weight: 700; color: var(--paper); margin: 20px 0 10px; }
   .output-body p { margin: 0 0 14px; }
   .output-body ul, .output-body ol { padding-left: 24px; margin: 0 0 14px; }
   .output-body li { margin-bottom: 6px; }
   .output-body strong { color: var(--gold-light); font-weight: 700; }
   .output-body em { color: var(--mist); font-style: italic; }
-  .output-body table {
-    width: 100%; border-collapse: collapse; margin: 16px 0;
-    font-size: 13px; font-family: 'JetBrains Mono', monospace;
-  }
-  .output-body th {
-    background: rgba(200,168,75,0.15); color: var(--gold);
-    padding: 10px 14px; text-align: left; font-weight: 700;
-    border: 1px solid rgba(200,168,75,0.2);
-  }
-  .output-body td {
-    padding: 8px 14px; border: 1px solid rgba(255,255,255,0.05);
-    color: rgba(245,242,236,0.8);
-  }
+  .output-body table { width: 100%; border-collapse: collapse; margin: 16px 0;
+    font-size: 13px; font-family: 'JetBrains Mono', monospace; }
+  .output-body th { background: rgba(200,168,75,0.15); color: var(--gold);
+    padding: 10px 14px; text-align: left; font-weight: 700; border: 1px solid rgba(200,168,75,0.2); }
+  .output-body td { padding: 8px 14px; border: 1px solid rgba(255,255,255,0.05); color: rgba(245,242,236,0.8); }
   .output-body tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
-  .output-body blockquote {
-    border-left: 3px solid var(--gold);
-    padding: 12px 20px; margin: 16px 0;
-    background: rgba(200,168,75,0.05);
-    font-style: italic; color: var(--mist);
-  }
-  .output-body code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px; background: rgba(255,255,255,0.06);
-    padding: 2px 6px; border-radius: 2px; color: #7aa3cc;
-  }
-  .output-body hr {
-    border: none; border-top: 1px solid rgba(200,168,75,0.15);
-    margin: 24px 0;
-  }
+  .output-body blockquote { border-left: 3px solid var(--gold); padding: 12px 20px; margin: 16px 0;
+    background: rgba(200,168,75,0.05); font-style: italic; color: var(--mist); }
+  .output-body code { font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    background: rgba(255,255,255,0.06); padding: 2px 6px; border-radius: 2px; color: #7aa3cc; }
+  .output-body hr { border: none; border-top: 1px solid rgba(200,168,75,0.15); margin: 24px 0; }
 
-  /* ─── ERROR ─── */
-  .error-box {
-    padding: 20px 24px;
-    background: rgba(139,26,26,0.15);
-    border: 1px solid rgba(139,26,26,0.3);
-    border-radius: 4px; color: #e8a0a0;
-    font-family: 'JetBrains Mono', monospace; font-size: 12px;
-    display: none; margin-bottom: 20px;
-  }
+  /* FULLSCREEN */
+  body.fullscreen .output-panel { position: fixed; inset: 0; z-index: 100; border-radius: 0;
+    display: flex; flex-direction: column; }
+  body.fullscreen .output-body { flex: 1; max-height: none; overflow-y: auto; }
+  body.fullscreen .bg-texture, body.fullscreen .bg-grid { z-index: 99; }
+
+  /* HISTORY SIDEBAR */
+  .history-sidebar { position: fixed; right: 0; top: 0; bottom: 0; width: 320px;
+    background: rgba(10,15,24,0.97); border-left: 1px solid rgba(200,168,75,0.2);
+    z-index: 200; transform: translateX(100%); transition: transform 0.3s ease;
+    display: flex; flex-direction: column; }
+  .history-sidebar.open { transform: translateX(0); }
+  .history-header { padding: 20px 20px 16px; border-bottom: 1px solid rgba(200,168,75,0.15);
+    display: flex; justify-content: space-between; align-items: center; }
+  .history-title { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold); }
+  .btn-close-history { background: none; border: none; color: var(--mist); cursor: pointer;
+    font-size: 18px; line-height: 1; padding: 2px 6px; transition: color 0.2s; }
+  .btn-close-history:hover { color: var(--paper); }
+  .history-list { flex: 1; overflow-y: auto; padding: 12px; }
+  .history-list::-webkit-scrollbar { width: 3px; }
+  .history-list::-webkit-scrollbar-thumb { background: rgba(200,168,75,0.2); }
+  .history-item { padding: 12px 14px; border: 1px solid rgba(200,168,75,0.1); border-radius: 4px;
+    margin-bottom: 8px; cursor: pointer; transition: all 0.2s; }
+  .history-item:hover { border-color: rgba(200,168,75,0.35); background: rgba(200,168,75,0.05); }
+  .history-item.starred .h-star { color: var(--gold); }
+  .h-meta { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; margin-bottom: 6px; }
+  .h-mode { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--mist); }
+  .h-time { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: rgba(107,122,141,0.6); }
+  .h-star { background: none; border: none; cursor: pointer; color: rgba(107,122,141,0.3);
+    font-size: 13px; padding: 0; transition: color 0.2s; }
+  .h-star:hover { color: var(--gold); }
+  .h-query { font-size: 12px; color: var(--paper); line-height: 1.4;
+    overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .h-depth { font-family: 'JetBrains Mono', monospace; font-size: 8px; color: rgba(107,122,141,0.5); margin-top: 4px; }
+  .h-del { background: none; border: none; cursor: pointer; color: rgba(139,26,26,0.4);
+    font-size: 10px; padding: 2px 4px; transition: color 0.2s; font-family: monospace; }
+  .h-del:hover { color: #e8a0a0; }
+  .history-footer { padding: 12px; border-top: 1px solid rgba(200,168,75,0.1); }
+  .btn-clear-all { width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: 2px; text-transform: uppercase; padding: 8px; border: 1px solid rgba(139,26,26,0.3);
+    background: transparent; color: rgba(139,26,26,0.6); cursor: pointer; border-radius: 2px; transition: all 0.2s; }
+  .btn-clear-all:hover { border-color: var(--red-accent); color: #e8a0a0; }
+  .history-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 199;
+    display: none; }
+  .history-overlay.open { display: block; }
+  .h-filter { display: flex; gap: 4px; padding: 8px 12px; border-bottom: 1px solid rgba(200,168,75,0.1); }
+  .h-filter-btn { font-family: 'JetBrains Mono', monospace; font-size: 8px; letter-spacing: 1px;
+    padding: 3px 8px; border: 1px solid rgba(200,168,75,0.15); border-radius: 10px;
+    background: transparent; color: var(--mist); cursor: pointer; transition: all 0.2s; }
+  .h-filter-btn.active { color: var(--gold); border-color: var(--gold); background: rgba(200,168,75,0.08); }
+
+  /* SHARE MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 300;
+    display: none; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { background: #0d1b2a; border: 1px solid rgba(200,168,75,0.3); border-radius: 8px;
+    padding: 32px; width: 480px; max-width: 90vw; }
+  .modal-title { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+  .share-link-box { display: flex; gap: 8px; margin-bottom: 16px; }
+  .share-link-input { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(200,168,75,0.2);
+    border-radius: 3px; padding: 10px 14px; color: var(--paper); font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; outline: none; }
+  .btn-copy-link { padding: 10px 16px; border: 1px solid rgba(200,168,75,0.4); border-radius: 3px;
+    background: rgba(200,168,75,0.1); color: var(--gold); font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+  .btn-copy-link:hover { background: rgba(200,168,75,0.2); }
+  .modal-note { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mist); line-height: 1.6; }
+  .btn-modal-close { margin-top: 20px; width: 100%; padding: 10px; border: 1px solid rgba(200,168,75,0.2);
+    background: transparent; color: var(--mist); font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; letter-spacing: 2px; cursor: pointer; border-radius: 2px; transition: all 0.2s; }
+  .btn-modal-close:hover { color: var(--paper); border-color: rgba(200,168,75,0.4); }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: rgba(13,27,42,0.95); border: 1px solid rgba(200,168,75,0.4);
+    color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 2px;
+    padding: 10px 24px; border-radius: 4px; z-index: 999;
+    transition: transform 0.3s ease; pointer-events: none; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ERROR */
+  .error-box { padding: 20px 24px; background: rgba(139,26,26,0.15);
+    border: 1px solid rgba(139,26,26,0.3); border-radius: 4px; color: #e8a0a0;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; display: none; margin-bottom: 20px; }
   .error-box.visible { display: block; }
 
-  /* ─── EXAMPLES ─── */
-  .examples-row {
-    display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px;
-  }
-  .example-chip {
-    font-family: 'JetBrains Mono', monospace; font-size: 10px;
-    letter-spacing: 1px; color: var(--mist);
-    border: 1px solid rgba(107,122,141,0.25);
-    padding: 5px 12px; border-radius: 20px; cursor: pointer;
-    transition: all 0.2s;
-  }
+  /* EXAMPLES */
+  .examples-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+  .example-chip { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 1px;
+    color: var(--mist); border: 1px solid rgba(107,122,141,0.25); padding: 5px 12px;
+    border-radius: 20px; cursor: pointer; transition: all 0.2s; }
   .example-chip:hover { color: var(--gold); border-color: rgba(200,168,75,0.4); }
 
-  /* ─── FOOTER ─── */
-  footer {
-    margin-top: 60px; padding-top: 24px;
-    border-top: 1px solid rgba(200,168,75,0.1);
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .footer-text {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px; letter-spacing: 2px; color: rgba(107,122,141,0.5);
-  }
+  /* FOLLOW-UP */
+  .followup-panel { margin-top: 24px; border-top: 1px solid rgba(200,168,75,0.15);
+    padding: 20px 32px 24px; display: none; animation: fadeIn 0.4s ease; }
+  .followup-panel.visible { display: block; }
+  .followup-label { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--mist); margin-bottom: 12px;
+    display: flex; justify-content: space-between; align-items: center; }
+  .conv-history { margin-bottom: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .conv-bubble { padding: 12px 16px; border-radius: 4px; font-size: 13px; line-height: 1.6; }
+  .conv-bubble.user { background: rgba(200,168,75,0.08); border: 1px solid rgba(200,168,75,0.2);
+    color: var(--gold-light); align-self: flex-end; max-width: 85%; margin-left: auto; font-family: 'JetBrains Mono', monospace; }
+  .conv-bubble.user::before { content: "↑ 追问"; font-size: 9px; opacity: 0.6; display: block; margin-bottom: 4px; }
+  .conv-bubble.assistant { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
+    color: rgba(245,242,236,0.85); }
+  .conv-bubble.assistant::before { content: "↓ 深化分析"; font-size: 9px; color: var(--mist); display: block; margin-bottom: 8px; font-family: 'JetBrains Mono', monospace; letter-spacing: 2px; }
+  .conv-bubble.assistant h2 { font-size: 15px; margin: 14px 0 7px; color: var(--gold-light); }
+  .conv-bubble.assistant h3 { font-size: 13px; margin: 10px 0 5px; }
+  .conv-bubble.assistant p { margin: 0 0 8px; }
+  .conv-bubble.assistant ul { padding-left: 18px; margin: 0 0 8px; }
+  .conv-bubble.assistant strong { color: var(--gold-light); }
+  .conv-bubble.assistant table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 8px 0; }
+  .conv-bubble.assistant th { background: rgba(200,168,75,0.12); color: var(--gold);
+    padding: 6px 10px; border: 1px solid rgba(200,168,75,0.2); font-size: 11px; }
+  .conv-bubble.assistant td { padding: 5px 10px; border: 1px solid rgba(255,255,255,0.05); }
+  .followup-input-row { display: flex; gap: 10px; align-items: flex-end; }
+  .followup-input { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(200,168,75,0.2);
+    border-radius: 4px; color: var(--paper); font-family: 'Playfair Display', serif;
+    font-size: 14px; padding: 12px 16px; outline: none; resize: none; min-height: 52px;
+    max-height: 160px; caret-color: var(--gold); transition: border-color 0.2s; line-height: 1.5; }
+  .followup-input:focus { border-color: rgba(200,168,75,0.5); }
+  .followup-input::placeholder { color: rgba(107,122,141,0.4); font-style: italic; }
+  .btn-followup { display: flex; align-items: center; gap: 8px; padding: 0 22px;
+    white-space: nowrap; border: 1px solid rgba(200,168,75,0.4); background: rgba(200,168,75,0.08);
+    color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; cursor: pointer; border-radius: 3px; transition: all 0.2s; height: 52px; }
+  .btn-followup:hover:not(:disabled) { background: rgba(200,168,75,0.15); box-shadow: 0 0 14px rgba(200,168,75,0.15); }
+  .btn-followup:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn-clear-conv { background: none; border: none; cursor: pointer; color: var(--mist);
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; padding: 0; transition: color 0.2s; }
+  .btn-clear-conv:hover { color: var(--red-accent); }
+  .followup-loading { font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--mist); padding: 10px 0; display: none; }
+  .followup-loading.active { display: block; }
 
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 900px) {
-    .skill-tabs { grid-template-columns: repeat(2, 1fr); }
-  }
+  /* FOOTER */
+  footer { margin-top: 60px; padding-top: 24px; border-top: 1px solid rgba(200,168,75,0.1);
+    display: flex; justify-content: space-between; align-items: center; }
+  .footer-text { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: rgba(107,122,141,0.5); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) { .skill-tabs { grid-template-columns: repeat(2,1fr); } }
   @media (max-width: 700px) {
     .skill-tabs { grid-template-columns: 1fr; }
     header { flex-direction: column; align-items: flex-start; gap: 16px; }
     .output-body { padding: 20px; }
+    .history-sidebar { width: 100%; }
+    .export-btns { display: none; }
+  }
+
+  /* PRINT */
+  @media print {
+    .bg-texture, .bg-grid, .skill-tabs, .depth-row, .input-panel,
+    .examples-row, .btn-submit, .loading-bar, .loading-status, .error-box,
+    .followup-panel, footer, .export-btns, .toolbar, .output-header { display: none !important; }
+    body { background: white; color: black; }
+    .output-panel { display: block !important; border: none; }
+    .output-body { color: black; padding: 0; }
+    .output-body h2 { color: #333; border-bottom-color: #ccc; }
+    .output-body strong { color: #000; }
+    .output-body th { background: #f0f0f0; color: #333; }
+    .output-body td { color: #333; border-color: #ddd; }
   }
 </style>
 </head>
@@ -377,6 +366,43 @@
 
 <div class="bg-texture"></div>
 <div class="bg-grid"></div>
+
+<!-- HISTORY OVERLAY -->
+<div class="history-overlay" id="historyOverlay" onclick="closeHistory()"></div>
+
+<!-- HISTORY SIDEBAR -->
+<div class="history-sidebar" id="historySidebar">
+  <div class="history-header">
+    <span class="history-title">// 历史记录</span>
+    <button class="btn-close-history" onclick="closeHistory()">×</button>
+  </div>
+  <div class="h-filter">
+    <button class="h-filter-btn active" onclick="filterHistory('all', this)">全部</button>
+    <button class="h-filter-btn" onclick="filterHistory('starred', this)">⭐ 收藏</button>
+    <button class="h-filter-btn" onclick="filterHistory('hypothesis', this)">假设</button>
+    <button class="h-filter-btn" onclick="filterHistory('trump', this)">剧本</button>
+  </div>
+  <div class="history-list" id="historyList"></div>
+  <div class="history-footer">
+    <button class="btn-clear-all" onclick="clearAllHistory()">清空全部历史记录</button>
+  </div>
+</div>
+
+<!-- SHARE MODAL -->
+<div class="modal-overlay" id="shareModal">
+  <div class="modal-box">
+    <div class="modal-title">// 分享报告</div>
+    <div class="share-link-box">
+      <input class="share-link-input" id="shareLinkInput" readonly>
+      <button class="btn-copy-link" onclick="copyShareLink()">复制链接</button>
+    </div>
+    <div class="modal-note">链接包含完整报告内容，任何人打开即可阅读。链接不会过期。</div>
+    <button class="btn-modal-close" onclick="closeShareModal()">关闭</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <div class="container">
 
@@ -387,41 +413,55 @@
       <div class="logo-zh">战略研究平台</div>
       <div class="logo-sub">Powered by Claude · Anthropic</div>
     </div>
-    <div class="header-badge">AI · RESEARCH · ANALYSIS</div>
+    <div class="header-right">
+      <!-- TOOLBAR -->
+      <div class="toolbar">
+        <div class="font-size-group">
+          <button class="toolbar-btn" onclick="changeFontSize(-1)" title="缩小字体">A−</button>
+          <button class="toolbar-btn" onclick="changeFontSize(1)" title="放大字体">A+</button>
+        </div>
+        <button class="toolbar-btn" id="themeBtn" onclick="toggleTheme()">☀ 浅色</button>
+        <button class="toolbar-btn" onclick="openHistory()">📚 历史</button>
+      </div>
+      <div class="header-badge">AI · RESEARCH · ANALYSIS</div>
+    </div>
   </header>
 
   <!-- SKILL SELECTOR -->
   <div class="section-label">// 选择分析模式</div>
   <div class="skill-tabs">
-
     <div class="skill-tab active" data-mode="hypothesis" onclick="selectMode('hypothesis', this)">
       <span class="tab-icon">🔬</span>
       <div class="tab-num">MODE 01</div>
       <div class="tab-title">战略假设分析</div>
       <div class="tab-desc">假设驱动推演<br>五层架构验证框架</div>
     </div>
-
     <div class="skill-tab" data-mode="critical" onclick="selectMode('critical', this)">
       <span class="tab-icon">⚖️</span>
       <div class="tab-num">MODE 02</div>
       <div class="tab-title">独立批判分析</div>
       <div class="tab-desc">正反对称审视<br>五步批判性框架</div>
     </div>
-
     <div class="skill-tab" data-mode="ren" onclick="selectMode('ren', this)">
       <span class="tab-icon">🏗️</span>
       <div class="tab-num">MODE 03</div>
       <div class="tab-title">任正非视角审视</div>
       <div class="tab-desc">华为经营哲学<br>犀利务实直指要害</div>
     </div>
-
     <div class="skill-tab" data-mode="trump" onclick="selectMode('trump', this)">
       <span class="tab-icon">🎲</span>
       <div class="tab-num">MODE 04</div>
       <div class="tab-title">懂王冲突剧本</div>
       <div class="tab-desc">Kobeissi 10步框架<br>阶段定位·市场推演</div>
     </div>
+  </div>
 
+  <!-- DEPTH SELECTOR -->
+  <div class="depth-row">
+    <span class="depth-label">// 深度</span>
+    <button class="depth-btn" data-depth="brief" onclick="selectDepth('brief', this)">⚡ 快速简报</button>
+    <button class="depth-btn active" data-depth="standard" onclick="selectDepth('standard', this)">📋 标准分析</button>
+    <button class="depth-btn" data-depth="deep" onclick="selectDepth('deep', this)">🔭 深度报告</button>
   </div>
 
   <!-- INPUT PANEL -->
@@ -443,7 +483,6 @@
     <span class="example-chip" onclick="fillExample(this)">欧盟战略自主假设分析</span>
   </div>
 
-  <!-- SUBMIT -->
   <br>
   <button class="btn-submit" id="submitBtn" onclick="runAnalysis()">
     <span>启动战略分析引擎</span>
@@ -462,13 +501,38 @@
   <!-- OUTPUT -->
   <div class="output-panel" id="outputPanel">
     <div class="output-header">
-      <span class="output-title" id="outputTitle">分析结果</span>
-      <span class="output-meta" id="outputMeta"></span>
+      <div class="output-header-left">
+        <span class="output-title" id="outputTitle">分析结果</span>
+        <span class="output-meta" id="outputMeta"></span>
+      </div>
+      <div class="export-btns">
+        <button class="btn-export" onclick="exportMarkdown()">↓ MD</button>
+        <button class="btn-export" onclick="exportPrint()">🖨 打印/PDF</button>
+        <button class="btn-export" onclick="openShareModal()">🔗 分享</button>
+        <button class="btn-export" onclick="toggleFullscreen()" id="fullscreenBtn">⛶ 全屏</button>
+        <button class="btn-export" onclick="starCurrentReport()" id="starBtn">☆ 收藏</button>
+      </div>
     </div>
     <div class="output-body" id="outputBody"></div>
+
+    <!-- FOLLOW-UP -->
+    <div class="followup-panel" id="followupPanel">
+      <div class="followup-label">
+        <span>// 深化追问</span>
+        <button class="btn-clear-conv" onclick="clearConversation()">清空对话 ×</button>
+      </div>
+      <div class="conv-history" id="convHistory"></div>
+      <div class="followup-loading" id="followupLoading">
+        <span class="loading-dots">正在深化分析</span>
+      </div>
+      <div class="followup-input-row">
+        <textarea class="followup-input" id="followupInput"
+          placeholder="基于以上分析，继续追问… (Ctrl+Enter 发送)" rows="2"></textarea>
+        <button class="btn-followup" id="followupBtn" onclick="sendFollowup()">追问 ↗</button>
+      </div>
+    </div>
   </div>
 
-  <!-- FOOTER -->
   <footer>
     <span class="footer-text">战略研究平台 · Strategic Intelligence · Claude-Powered</span>
     <span class="footer-text">© 2026 · 仅供研究参考</span>
@@ -477,8 +541,27 @@
 </div>
 
 <script>
-// ─── STATE ───
+// ════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════
 let currentMode = 'hypothesis';
+let currentDepth = 'standard';
+let conversationHistory = [];
+let lastSystemPrompt = '';
+let currentReportText = '';
+let currentReportTitle = '';
+let currentHistoryId = null;
+let historyFilter = 'all';
+let fontSize = 15;
+let isLightMode = false;
+let isFullscreen = false;
+
+const DEPTH_CONFIG = {
+  brief:    { label: '快速简报', maxTokens: 2000, suffix: '\n\n**输出要求：快速简报模式。** 压缩为最关键的3-5个核心判断，每条不超过3句话，直接给结论。总字数600字以内。' },
+  standard: { label: '标准分析', maxTokens: 5000, suffix: '' },
+  deep:     { label: '深度报告', maxTokens: 10000, suffix: '\n\n**输出要求：深度报告模式。** 大幅扩展每个模块深度，增加历史案例对比、数据引用、多方观点。总字数不少于2500字。' }
+};
+
 const MODES = {
   hypothesis: {
     tag: '战略假设',
@@ -852,36 +935,258 @@ const MODES = {
   }
 };
 
-// ─── MODE SWITCH ───
+// ════════════════════════════════════════════
+// HISTORY (localStorage)
+// ════════════════════════════════════════════
+function loadHistory() {
+  try { return JSON.parse(localStorage.getItem('sp_history') || '[]'); }
+  catch(e) { return []; }
+}
+function saveHistory(list) {
+  try { localStorage.setItem('sp_history', JSON.stringify(list.slice(0, 100))); }
+  catch(e) {}
+}
+function addToHistory(item) {
+  const list = loadHistory();
+  list.unshift(item);
+  saveHistory(list);
+  return item.id;
+}
+function updateHistoryItem(id, patch) {
+  const list = loadHistory();
+  const idx = list.findIndex(i => i.id === id);
+  if (idx >= 0) { list[idx] = {...list[idx], ...patch}; saveHistory(list); }
+}
+function deleteHistoryItem(id) {
+  saveHistory(loadHistory().filter(i => i.id !== id));
+  renderHistoryList();
+}
+function clearAllHistory() {
+  if (!confirm('确定清空全部历史记录？')) return;
+  localStorage.removeItem('sp_history');
+  renderHistoryList();
+  showToast('历史记录已清空');
+}
+
+function renderHistoryList() {
+  const list = loadHistory();
+  const el = document.getElementById('historyList');
+  const filtered = historyFilter === 'starred' ? list.filter(i => i.starred) :
+    historyFilter === 'all' ? list : list.filter(i => i.mode === historyFilter);
+  if (!filtered.length) {
+    el.innerHTML = '<div style="text-align:center;padding:40px 0;font-family:JetBrains Mono,monospace;font-size:11px;color:var(--mist)">暂无记录</div>';
+    return;
+  }
+  el.innerHTML = filtered.map(item => `
+    <div class="history-item ${item.starred ? 'starred' : ''}" data-id="${item.id}">
+      <div class="h-meta">
+        <span class="h-mode">${MODES[item.mode]?.tag || item.mode} · ${item.depth}</span>
+        <div style="display:flex;gap:4px;align-items:center">
+          <button class="h-star" onclick="event.stopPropagation();toggleStar('${item.id}')">${item.starred ? '⭐' : '☆'}</button>
+          <button class="h-del" onclick="event.stopPropagation();deleteHistoryItem('${item.id}')">✕</button>
+        </div>
+      </div>
+      <div class="h-query">${escHtml(item.query)}</div>
+      <div class="h-depth">${new Date(item.ts).toLocaleString('zh-CN', {month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+    </div>
+  `).join('');
+  el.querySelectorAll('.history-item').forEach(el => {
+    el.addEventListener('click', () => restoreHistoryItem(el.dataset.id));
+  });
+}
+
+function toggleStar(id) {
+  const list = loadHistory();
+  const item = list.find(i => i.id === id);
+  if (item) { item.starred = !item.starred; saveHistory(list); }
+  renderHistoryList();
+  if (currentHistoryId === id) {
+    const starBtn = document.getElementById('starBtn');
+    starBtn.textContent = item?.starred ? '⭐ 已收藏' : '☆ 收藏';
+  }
+}
+
+function starCurrentReport() {
+  if (!currentHistoryId) return;
+  toggleStar(currentHistoryId);
+}
+
+function restoreHistoryItem(id) {
+  const list = loadHistory();
+  const item = list.find(i => i.id === id);
+  if (!item) return;
+  currentReportText = item.result;
+  currentReportTitle = item.title;
+  currentHistoryId = id;
+  document.getElementById('outputTitle').textContent = item.title;
+  document.getElementById('outputMeta').textContent = `${MODES[item.mode]?.tag} · ${item.depth} · 历史记录`;
+  document.getElementById('outputBody').innerHTML = renderMarkdown(item.result);
+  document.getElementById('outputPanel').classList.add('visible');
+  document.getElementById('followupPanel').classList.remove('visible');
+  conversationHistory = [
+    {role:'user', content: item.query},
+    {role:'assistant', content: item.result}
+  ];
+  lastSystemPrompt = MODES[item.mode]?.system || '';
+  closeHistory();
+  setTimeout(() => document.getElementById('outputPanel').scrollIntoView({behavior:'smooth',block:'start'}), 100);
+}
+
+function filterHistory(type, btn) {
+  historyFilter = type;
+  document.querySelectorAll('.h-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderHistoryList();
+}
+
+function openHistory() { 
+  renderHistoryList();
+  document.getElementById('historySidebar').classList.add('open');
+  document.getElementById('historyOverlay').classList.add('open');
+}
+function closeHistory() {
+  document.getElementById('historySidebar').classList.remove('open');
+  document.getElementById('historyOverlay').classList.remove('open');
+}
+
+// ════════════════════════════════════════════
+// EXPORT
+// ════════════════════════════════════════════
+function exportMarkdown() {
+  if (!currentReportText) return;
+  const blob = new Blob([currentReportText], {type: 'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `strategic-report-${Date.now()}.md`;
+  a.click();
+  showToast('Markdown 已下载');
+}
+
+function exportPrint() {
+  window.print();
+}
+
+// ════════════════════════════════════════════
+// SHARE
+// ════════════════════════════════════════════
+function openShareModal() {
+  if (!currentReportText) return;
+  try {
+    const payload = {
+      title: currentReportTitle,
+      mode: currentMode,
+      depth: currentDepth,
+      content: currentReportText,
+      ts: Date.now()
+    };
+    const encoded = btoa(encodeURIComponent(JSON.stringify(payload)));
+    const url = `${location.origin}${location.pathname}?r=${encoded}`;
+    document.getElementById('shareLinkInput').value = url;
+    document.getElementById('shareModal').classList.add('open');
+  } catch(e) { showToast('报告内容过大，无法生成链接'); }
+}
+function closeShareModal() { document.getElementById('shareModal').classList.remove('open'); }
+function copyShareLink() {
+  const input = document.getElementById('shareLinkInput');
+  navigator.clipboard.writeText(input.value).then(() => {
+    showToast('链接已复制');
+    closeShareModal();
+  }).catch(() => { input.select(); document.execCommand('copy'); showToast('链接已复制'); closeShareModal(); });
+}
+
+function checkSharedReport() {
+  const params = new URLSearchParams(location.search);
+  const r = params.get('r');
+  if (!r) return;
+  try {
+    const payload = JSON.parse(decodeURIComponent(atob(r)));
+    currentReportText = payload.content;
+    currentReportTitle = payload.title || '分享报告';
+    document.getElementById('outputTitle').textContent = currentReportTitle;
+    document.getElementById('outputMeta').textContent = `分享报告 · ${new Date(payload.ts).toLocaleString('zh-CN')}`;
+    document.getElementById('outputBody').innerHTML = renderMarkdown(payload.content);
+    document.getElementById('outputPanel').classList.add('visible');
+    setTimeout(() => document.getElementById('outputPanel').scrollIntoView({behavior:'smooth',block:'start'}), 300);
+  } catch(e) {}
+}
+
+// ════════════════════════════════════════════
+// THEME & FONT & FULLSCREEN
+// ════════════════════════════════════════════
+function toggleTheme() {
+  isLightMode = !isLightMode;
+  document.body.classList.toggle('light-mode', isLightMode);
+  document.getElementById('themeBtn').textContent = isLightMode ? '🌙 深色' : '☀ 浅色';
+  localStorage.setItem('sp_theme', isLightMode ? 'light' : 'dark');
+}
+function changeFontSize(delta) {
+  fontSize = Math.max(12, Math.min(22, fontSize + delta));
+  document.documentElement.style.setProperty('--font-size', fontSize + 'px');
+  localStorage.setItem('sp_fontsize', fontSize);
+}
+function toggleFullscreen() {
+  isFullscreen = !isFullscreen;
+  document.body.classList.toggle('fullscreen', isFullscreen);
+  document.getElementById('fullscreenBtn').textContent = isFullscreen ? '✕ 退出全屏' : '⛶ 全屏';
+}
+function initPrefs() {
+  const theme = localStorage.getItem('sp_theme');
+  if (theme === 'light') { isLightMode = true; document.body.classList.add('light-mode'); document.getElementById('themeBtn').textContent = '🌙 深色'; }
+  const fs = parseInt(localStorage.getItem('sp_fontsize'));
+  if (fs) { fontSize = fs; document.documentElement.style.setProperty('--font-size', fs + 'px'); }
+}
+
+// ════════════════════════════════════════════
+// TOAST
+// ════════════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════
+function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ════════════════════════════════════════════
+// MODE / DEPTH SWITCH
+// ════════════════════════════════════════════
 function selectMode(mode, el) {
   currentMode = mode;
   document.querySelectorAll('.skill-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  
   const cfg = MODES[mode];
   const panel = document.getElementById('inputPanel');
   panel.className = 'input-panel ' + cfg.panelClass;
   document.getElementById('modeTag').textContent = cfg.tag;
   document.getElementById('inputHint').textContent = cfg.hint;
   document.getElementById('userInput').placeholder = cfg.placeholder;
-  
-  // Update examples
   const row = document.getElementById('examplesRow');
-  row.innerHTML = cfg.examples.map(e =>
-    `<span class="example-chip" onclick="fillExample(this)">${e}</span>`
-  ).join('');
-  
-  // Hide output
+  row.innerHTML = cfg.examples.map(e => `<span class="example-chip" onclick="fillExample(this)">${e}</span>`).join('');
   document.getElementById('outputPanel').classList.remove('visible');
   document.getElementById('errorBox').classList.remove('visible');
 }
+function selectDepth(depth, el) {
+  currentDepth = depth;
+  document.querySelectorAll('.depth-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+function clearConversation() {
+  conversationHistory = [];
+  document.getElementById('convHistory').innerHTML = '';
+  document.getElementById('followupInput').value = '';
+}
 
-// ─── CHAR COUNT ───
+// ════════════════════════════════════════════
+// INPUT
+// ════════════════════════════════════════════
 document.getElementById('userInput').addEventListener('input', function() {
   document.getElementById('charCount').textContent = this.value.length + ' / 2000';
 });
-
-// ─── FILL EXAMPLE ───
 function fillExample(el) {
   document.getElementById('userInput').value = el.textContent;
   document.getElementById('charCount').textContent = el.textContent.length + ' / 2000';
@@ -920,138 +1225,136 @@ function renderMarkdown(text) {
     .replace(/\n/g, ' ');
 }
 
-// ─── RUN ANALYSIS ───
+// ════════════════════════════════════════════
+// API CALL (agentic loop)
+// ════════════════════════════════════════════
+async function callAPI(messages, systemPrompt, maxTokens, useSearch) {
+  const tools = useSearch ? [{type: 'web_search_20250305', name: 'web_search'}] : undefined;
+  let finalText = '';
+  let searchCount = 0;
+  const MAX_ROUNDS = 8;
+  for (let round = 0; round < MAX_ROUNDS; round++) {
+    const body = { model: 'claude-sonnet-4-20250514', max_tokens: maxTokens, system: systemPrompt, messages };
+    if (tools) body.tools = tools;
+    const response = await fetch('/api/proxy', {
+      method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error?.message || `HTTP ${response.status}`);
+    }
+    const data = await response.json();
+    const textBlocks = data.content?.filter(b => b.type === 'text') || [];
+    const toolBlocks = data.content?.filter(b => b.type === 'tool_use') || [];
+    finalText += textBlocks.map(b => b.text).join('');
+    if (toolBlocks.length === 0 || data.stop_reason === 'end_turn') break;
+    searchCount += toolBlocks.length;
+    const queries = toolBlocks.map(t => t.input?.query || '').filter(Boolean);
+    if (queries.length) {
+      document.getElementById('loadingStatus').innerHTML =
+        `<span>正在搜索：${queries.join(' / ')}</span><span class="loading-dots"></span>`;
+    }
+    messages = [...messages, {role:'assistant', content: data.content}];
+    messages.push({role:'user', content: toolBlocks.map(t => ({type:'tool_result', tool_use_id: t.id, content:''}))});
+  }
+  return { text: finalText, searchCount };
+}
+
+// ════════════════════════════════════════════
+// MAIN ANALYSIS
+// ════════════════════════════════════════════
 async function runAnalysis() {
   const input = document.getElementById('userInput').value.trim();
-  if (!input) {
-    document.getElementById('userInput').focus();
-    return;
-  }
-
+  if (!input) { document.getElementById('userInput').focus(); return; }
   const cfg = MODES[currentMode];
+  const depthCfg = DEPTH_CONFIG[currentDepth];
   const btn = document.getElementById('submitBtn');
   const loadingBar = document.getElementById('loadingBar');
   const loadingStatus = document.getElementById('loadingStatus');
   const outputPanel = document.getElementById('outputPanel');
   const errorBox = document.getElementById('errorBox');
-
-  // Set state
-  btn.disabled = true;
-  loadingBar.classList.add('active');
-  loadingStatus.classList.add('active');
-  outputPanel.classList.remove('visible');
-  errorBox.classList.remove('visible');
-
+  btn.disabled = true; loadingBar.classList.add('active'); loadingStatus.classList.add('active');
+  outputPanel.classList.remove('visible'); errorBox.classList.remove('visible');
+  loadingStatus.innerHTML = '<span class="loading-dots">正在调用战略分析模型</span>';
   const startTime = Date.now();
-
-  // Modes that require real-time web search
-  const SEARCH_MODES = ['trump', 'hypothesis'];
-
-  // Build tools array for search-enabled modes
-  const useSearch = SEARCH_MODES.includes(currentMode);
-  const tools = useSearch ? [{ type: 'web_search_20250305', name: 'web_search' }] : undefined;
-  const maxTokens = useSearch ? 8000 : 5000;
-
-  // Today's date injected into system prompt for grounding
-  const today = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
-  const datedSystem = cfg.system + `\n\n今天的日期是：${today}。分析时必须基于最新实时信息，优先通过搜索工具获取当前数据。`;
-
+  const useSearch = ['trump','hypothesis'].includes(currentMode);
+  const maxTokens = useSearch ? Math.max(depthCfg.maxTokens, 8000) : depthCfg.maxTokens;
+  const today = new Date().toLocaleDateString('zh-CN', {year:'numeric',month:'long',day:'numeric'});
+  const systemPrompt = cfg.system + depthCfg.suffix + `\n\n今天的日期是：${today}。` +
+    (useSearch ? '分析时必须基于最新实时信息，优先通过搜索工具获取当前数据。' : '');
   try {
-    // Agentic loop: keep calling API until no more tool_use blocks
-    let messages = [{ role: 'user', content: input }];
-    let finalText = '';
-    let searchCount = 0;
-    const MAX_ROUNDS = 8;
-
-    for (let round = 0; round < MAX_ROUNDS; round++) {
-      // Update loading status
-      const statusEl = document.getElementById('loadingStatus');
-      if (searchCount > 0) {
-        statusEl.innerHTML = `<span>已完成 ${searchCount} 次实时搜索，正在生成分析报告</span><span class="loading-dots"></span>`;
-      } else {
-        statusEl.innerHTML = `<span class="loading-dots">正在调用战略分析模型</span>`;
-      }
-
-      const body = {
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: maxTokens,
-        system: datedSystem,
-        messages
-      };
-      if (tools) body.tools = tools;
-
-      const response = await fetch('/api/proxy', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      });
-
-      if (!response.ok) {
-        const err = await response.json().catch(() => ({}));
-        throw new Error(err.error?.message || `HTTP ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      // Collect all text blocks from this round
-      const textBlocks = data.content?.filter(b => b.type === 'text') || [];
-      const toolUseBlocks = data.content?.filter(b => b.type === 'tool_use') || [];
-
-      // Accumulate any text output
-      finalText += textBlocks.map(b => b.text).join('');
-
-      // If no tool calls, we're done
-      if (toolUseBlocks.length === 0 || data.stop_reason === 'end_turn') break;
-
-      // Process tool calls — execute web searches
-      searchCount += toolUseBlocks.length;
-
-      // Update status with search queries
-      const queries = toolUseBlocks.map(t => t.input?.query || '').filter(Boolean);
-      if (queries.length) {
-        document.getElementById('loadingStatus').innerHTML =
-          `<span>正在搜索：${queries.join(' / ')}</span><span class="loading-dots"></span>`;
-      }
-
-      // Add assistant message with tool use to history
-      messages.push({ role: 'assistant', content: data.content });
-
-      // Add tool results back — the browser's API proxy handles actual search execution
-      // For web_search_20250305, results come back in the next assistant turn automatically
-      // We just need to add empty tool_result placeholders to satisfy the message format
-      const toolResults = toolUseBlocks.map(t => ({
-        type: 'tool_result',
-        tool_use_id: t.id,
-        content: '' // API fills this in server-side for web_search
-      }));
-      messages.push({ role: 'user', content: toolResults });
-    }
-
+    const { text, searchCount } = await callAPI([{role:'user',content:input}], systemPrompt, maxTokens, useSearch);
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
     const searchInfo = searchCount > 0 ? ` · 🔍 ${searchCount}次实时搜索` : '';
-
+    currentReportText = text;
+    currentReportTitle = cfg.title;
+    lastSystemPrompt = systemPrompt;
+    // Save to history
+    const histItem = { id: Date.now().toString(), mode: currentMode, depth: depthCfg.label,
+      query: input.slice(0,120), title: cfg.title, result: text, ts: Date.now(), starred: false };
+    currentHistoryId = addToHistory(histItem);
+    document.getElementById('starBtn').textContent = '☆ 收藏';
     // Render
     document.getElementById('outputTitle').textContent = cfg.title;
-    document.getElementById('outputMeta').textContent = `生成耗时 ${elapsed}s · ${currentMode.toUpperCase()} MODE${searchInfo}`;
-    document.getElementById('outputBody').innerHTML = renderMarkdown(finalText);
+    document.getElementById('outputMeta').textContent = `生成耗时 ${elapsed}s · ${currentMode.toUpperCase()} · ${depthCfg.label}${searchInfo}`;
+    document.getElementById('outputBody').innerHTML = renderMarkdown(text);
     outputPanel.classList.add('visible');
-
-    // Scroll to output
-    setTimeout(() => outputPanel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-
-  } catch (err) {
-    errorBox.textContent = '⚠ 分析请求失败：' + err.message;
-    errorBox.classList.add('visible');
+    conversationHistory = [{role:'user',content:input},{role:'assistant',content:text}];
+    document.getElementById('convHistory').innerHTML = '';
+    document.getElementById('followupPanel').classList.add('visible');
+    document.getElementById('followupInput').value = '';
+    setTimeout(() => outputPanel.scrollIntoView({behavior:'smooth',block:'start'}), 100);
+  } catch(err) {
+    errorBox.textContent = '⚠ 分析请求失败：' + err.message; errorBox.classList.add('visible');
   } finally {
-    btn.disabled = false;
-    loadingBar.classList.remove('active');
-    loadingStatus.classList.remove('active');
+    btn.disabled = false; loadingBar.classList.remove('active'); loadingStatus.classList.remove('active');
   }
 }
 
-// ─── ENTER SHORTCUT ───
-document.getElementById('userInput').addEventListener('keydown', function(e) {
-  if (e.ctrlKey && e.key === 'Enter') runAnalysis();
+// ════════════════════════════════════════════
+// FOLLOW-UP
+// ════════════════════════════════════════════
+async function sendFollowup() {
+  const input = document.getElementById('followupInput').value.trim();
+  if (!input) return;
+  const followupBtn = document.getElementById('followupBtn');
+  const followupLoading = document.getElementById('followupLoading');
+  const convHistory = document.getElementById('convHistory');
+  const userBubble = document.createElement('div');
+  userBubble.className = 'conv-bubble user'; userBubble.textContent = input;
+  convHistory.appendChild(userBubble);
+  document.getElementById('followupInput').value = '';
+  followupBtn.disabled = true; followupLoading.classList.add('active');
+  conversationHistory.push({role:'user',content:input});
+  const useSearch = ['trump','hypothesis'].includes(currentMode);
+  try {
+    const {text} = await callAPI([...conversationHistory], lastSystemPrompt, 3000, useSearch);
+    const aiBubble = document.createElement('div');
+    aiBubble.className = 'conv-bubble assistant'; aiBubble.innerHTML = renderMarkdown(text);
+    convHistory.appendChild(aiBubble);
+    conversationHistory.push({role:'assistant',content:text});
+    setTimeout(() => aiBubble.scrollIntoView({behavior:'smooth',block:'nearest'}), 100);
+  } catch(err) {
+    const errBubble = document.createElement('div');
+    errBubble.className = 'conv-bubble user'; errBubble.style.color = '#e8a0a0';
+    errBubble.textContent = '⚠ 追问失败：' + err.message;
+    convHistory.appendChild(errBubble);
+    conversationHistory.pop();
+  } finally { followupBtn.disabled = false; followupLoading.classList.remove('active'); }
+}
+
+// ════════════════════════════════════════════
+// SHORTCUTS
+// ════════════════════════════════════════════
+document.getElementById('userInput').addEventListener('keydown', e => { if (e.ctrlKey && e.key === 'Enter') runAnalysis(); });
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('followupInput').addEventListener('keydown', e => { if (e.ctrlKey && e.key === 'Enter') sendFollowup(); });
+  initPrefs();
+  checkSharedReport();
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && isFullscreen) toggleFullscreen();
+  if (e.key === 'Escape') closeShareModal();
 });
 </script>
 </body>
